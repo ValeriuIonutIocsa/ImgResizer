@@ -1,0 +1,18 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" factoryName="JUnit" folderName="ImgResizer" name="AppStartImgResizerTest.testMain" nameIsGenerated="true" type="JUnit">
+        <module name="ImgResizerAllModules.ImgResizer.test"/>
+        <extension name="coverage">
+            <pattern>
+                <option name="PATTERN" value="com.personal.img_resizer.*"/>
+                <option name="ENABLED" value="true"/>
+            </pattern>
+        </extension>
+        <option name="PACKAGE_NAME" value="com.personal.img_resizer"/>
+        <option name="MAIN_CLASS_NAME" value="com.personal.img_resizer.AppStartImgResizerTest"/>
+        <option name="METHOD_NAME" value="testMain"/>
+        <option name="TEST_OBJECT" value="method"/>
+        <method v="2">
+            <option enabled="true" name="Make"/>
+        </method>
+    </configuration>
+</component>
