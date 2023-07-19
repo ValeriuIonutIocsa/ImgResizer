@@ -70,7 +70,7 @@ class MetadataExporter {
 
 				final String trimmedLine = line.trim();
 
-				if (imageType == ImageType.JPG) {
+				if (imageType == ImageType.JPG || imageType == ImageType.HEIC) {
 
 					final Matcher imageWidthMatcher = jpgImageWidthPattern.matcher(trimmedLine);
 					if (imageWidthMatcher.matches()) {

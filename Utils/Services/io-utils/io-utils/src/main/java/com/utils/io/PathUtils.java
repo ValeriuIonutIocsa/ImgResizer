@@ -110,6 +110,17 @@ public final class PathUtils {
 				pathString = FilenameUtils.normalize(pathString);
 			}
 
+			while (true) {
+
+				final int lastCharIndex = pathString.length() - 1;
+				if (!(pathString.charAt(lastCharIndex) == '\\' ||
+						pathString.charAt(lastCharIndex) == '/')) {
+
+					break;
+				}
+				pathString = pathString.substring(0, lastCharIndex);
+			}
+
 		} catch (final Exception exc) {
 
 			if (verbose) {
@@ -138,13 +149,37 @@ public final class PathUtils {
 		return computeFileName(pathString);
 	}
 
+	/**
+	 * Gets the name minus the path from a full fileName.
+	 * <p>
+	 * This method will handle a file in either Unix or Windows format. The text after the last forward or backslash is
+	 * returned.
+	 * </p>
+	 * 
+	 * <pre>
+	 * a/b/c.txt --&gt; c.txt
+	 * a.txt     --&gt; a.txt
+	 * a/b/c     --&gt; c
+	 * a/b/c/    --&gt; c
+	 * </pre>
+	 *
+	 * @param pathString
+	 *            the input path string
+	 * @return the name of the file without the path
+	 */
 	@ApiMethod
 	public static String computeFileName(
 			final String pathString) {
 
-		final Path path = Paths.get(pathString);
-		final Path fileName = path.getFileName();
-		return fileName.toString();
+		final String fileName;
+		if (pathString == null) {
+			fileName = null;
+
+		} else {
+			final Path path = Paths.get(pathString);
+			fileName = path.getFileName().toString();
+		}
+		return fileName;
 	}
 
 	@ApiMethod

@@ -1,5 +1,7 @@
 package com.personal.img_resizer;
 
+import org.apache.commons.lang3.StringUtils;
+
 class FactoryImageType {
 
 	private FactoryImageType() {
@@ -9,9 +11,12 @@ class FactoryImageType {
 			final String filePathString) {
 
 		ImageType imageType = null;
-		if (filePathString.endsWith(".jpg") || filePathString.endsWith(".jpeg")) {
+		if (StringUtils.endsWithIgnoreCase(filePathString, ".jpg") ||
+				StringUtils.endsWithIgnoreCase(filePathString, ".jpeg")) {
 			imageType = ImageType.JPG;
-		} else if (filePathString.endsWith(".png")) {
+		} else if (StringUtils.endsWithIgnoreCase(filePathString, ".heic")) {
+			imageType = ImageType.HEIC;
+		} else if (StringUtils.endsWithIgnoreCase(filePathString, ".png")) {
 			imageType = ImageType.PNG;
 		}
 		return imageType;

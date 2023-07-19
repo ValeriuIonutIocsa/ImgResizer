@@ -7,7 +7,9 @@ ext {
     subProjectNames = [
             ':io-utils'
     ]
-    compileClassPaths = []
+    compileClassPaths = [
+            'org.im4java:im4java:1.4.0'
+    ]
     compileJarFilePaths = []
     testCompileClassPaths = []
     testCompileJarFilePaths = []

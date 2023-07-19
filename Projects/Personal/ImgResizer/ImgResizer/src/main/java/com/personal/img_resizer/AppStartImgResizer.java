@@ -5,6 +5,10 @@ import java.nio.file.Files;
 import java.time.Instant;
 import java.util.List;
 
+import org.im4java.core.ConvertCmd;
+import org.im4java.core.IMOperation;
+import org.im4java.process.ProcessStarter;
+
 import com.utils.io.IoUtils;
 import com.utils.io.ListFileUtils;
 import com.utils.io.PathUtils;
@@ -48,7 +52,8 @@ final class AppStartImgResizer {
 					} else {
 						final String inputPathString = PathUtils.computeNormalizedPath("input path", args[1]);
 						final String outputPathString = PathUtils.computeNormalizedPath("output path", args[2]);
-						success = work(length, inputPathString, outputPathString);
+						final boolean verbose = args.length >= 4 && "-verbose".equals(args[3]);
+						success = work(length, inputPathString, outputPathString, verbose);
 					}
 				}
 			}
@@ -66,13 +71,14 @@ final class AppStartImgResizer {
 
 	private static String createHelpMessage() {
 
-		return "usage: img_resizer <length> <input_path> <output_path>";
+		return "usage: img_resizer <length> <input_path> <output_path> (-verbose)";
 	}
 
 	private static boolean work(
 			final int length,
 			final String inputPathString,
-			final String outputPathString) {
+			final String outputPathString,
+			final boolean verbose) {
 
 		boolean success = true;
 
@@ -93,10 +99,11 @@ final class AppStartImgResizer {
 					foundImages = true;
 
 					final String relativePath = PathUtils.computeRelativePath(inputPathString, filePathString);
-					final String outputFilePathString = PathUtils.computePath(outputPathString, relativePath);
+					String outputFilePathString = PathUtils.computePath(outputPathString, relativePath);
+					outputFilePathString = PathUtils.computePathWoExt(outputFilePathString) + ".jpg";
 
 					final boolean resizedImageSuccess =
-							resizeImage(filePathString, outputFilePathString, imageType, length);
+							resizeImage(filePathString, outputFilePathString, verbose, imageType, length);
 					if (!resizedImageSuccess) {
 						success = false;
 					}
@@ -112,7 +119,7 @@ final class AppStartImgResizer {
 			if (imageType != null) {
 
 				final boolean resizedImageSuccess =
-						resizeImage(inputPathString, outputPathString, imageType, length);
+						resizeImage(inputPathString, outputPathString, verbose, imageType, length);
 				if (!resizedImageSuccess) {
 					success = false;
 				}
@@ -130,66 +137,101 @@ final class AppStartImgResizer {
 	private static boolean resizeImage(
 			final String filePathString,
 			final String outputFilePathString,
+			final boolean verbose,
 			final ImageType imageType,
 			final int length) {
 
-		boolean success = false;
-		try {
-			Logger.printProgress("copying image file:");
-			Logger.printLine(filePathString);
-			Logger.printLine("to:");
-			Logger.printLine(outputFilePathString);
+		Logger.printProgress("copying image file:");
+		Logger.printLine(filePathString);
+		Logger.printLine("to:");
+		Logger.printLine(outputFilePathString);
 
-			success = FactoryFileDeleter.getInstance().deleteFile(outputFilePathString, false, true);
+		boolean success = FactoryFileDeleter.getInstance()
+				.deleteFile(outputFilePathString, false, true);
+		if (success) {
+
+			success = FactoryFolderCreator.getInstance()
+					.createParentDirectories(outputFilePathString, false, true);
 			if (success) {
 
-				success = FactoryFolderCreator.getInstance()
-						.createParentDirectories(outputFilePathString, false, true);
+				final String jpgFilePathString = PathUtils.computePathWoExt(filePathString) + ".jpg";
+				if (imageType != ImageType.JPG) {
+
+					success = false;
+					try {
+						ProcessStarter.setGlobalSearchPath("D:\\IVI_MISC\\Apps\\ImageMagick");
+						final ConvertCmd convertCmd = new ConvertCmd();
+
+						final IMOperation imOperation = new IMOperation();
+
+						imOperation.addImage(filePathString);
+
+						imOperation.quality(100.0);
+
+						imOperation.addImage(jpgFilePathString);
+
+						convertCmd.run(imOperation);
+						success = true;
+
+					} catch (final Exception exc) {
+						exc.printStackTrace();
+					}
+				}
 				if (success) {
 
-					final MetadataExporter metadataExporter = new MetadataExporter(filePathString, imageType);
-					metadataExporter.work();
-					success = metadataExporter.isSuccess();
-					if (success) {
+					try {
+						final MetadataExporter metadataExporter = new MetadataExporter(jpgFilePathString, imageType);
+						metadataExporter.work();
 
-						final String scale;
-						final int imageWidth = metadataExporter.getImageWidth();
-						final int imageHeight = metadataExporter.getImageHeight();
-						if (imageWidth > imageHeight) {
-							scale = "scale=-1:" + length;
-						} else {
-							scale = "scale=" + length + ":-1";
-						}
-
-						final Process process = new ProcessBuilder()
-								.command("ffmpeg", "-i", filePathString,
-										"-movflags", "use_metadata_tags", "-map_metadata", "0",
-										"-vf", scale, outputFilePathString)
-								.directory(new File(outputFilePathString).getParentFile())
-								.redirectOutput(ProcessBuilder.Redirect.DISCARD)
-								.redirectError(ProcessBuilder.Redirect.DISCARD)
-								.start();
-						final int exitCode = process.waitFor();
-						success = exitCode == 0;
+						success = metadataExporter.isSuccess();
 						if (success) {
 
-							final String metadataXmlPathString = metadataExporter.getMetadataXmlPathString();
-							final MetadataImporter metadataImporter =
-									new MetadataImporter(outputFilePathString, metadataXmlPathString);
-							metadataImporter.work();
+							final String scale;
+							final int imageWidth = metadataExporter.getImageWidth();
+							final int imageHeight = metadataExporter.getImageHeight();
+							if (imageWidth > imageHeight) {
+								scale = "scale=-1:" + length;
+							} else {
+								scale = "scale=" + length + ":-1";
+							}
 
-							success = metadataImporter.isSuccess();
+							final ProcessBuilder.Redirect processBuilderRedirect;
+							if (verbose) {
+								processBuilderRedirect = ProcessBuilder.Redirect.INHERIT;
+							} else {
+								processBuilderRedirect = ProcessBuilder.Redirect.DISCARD;
+							}
+
+							final Process process = new ProcessBuilder()
+									.command("ffmpeg", "-i", jpgFilePathString,
+											"-movflags", "use_metadata_tags", "-map_metadata", "0",
+											"-vf", scale, outputFilePathString)
+									.directory(new File(outputFilePathString).getParentFile())
+									.redirectOutput(processBuilderRedirect)
+									.redirectError(processBuilderRedirect)
+									.start();
+							final int exitCode = process.waitFor();
+							success = exitCode == 0;
+							if (success) {
+
+								final String metadataXmlPathString = metadataExporter.getMetadataXmlPathString();
+								final MetadataImporter metadataImporter =
+										new MetadataImporter(outputFilePathString, metadataXmlPathString);
+								metadataImporter.work();
+
+								success = metadataImporter.isSuccess();
+							}
 						}
+
+					} catch (final Exception exc) {
+						Logger.printError("failed to resize image " +
+								System.lineSeparator() + jpgFilePathString +
+								System.lineSeparator() + "to:" +
+								System.lineSeparator() + outputFilePathString);
+						Logger.printException(exc);
 					}
 				}
 			}
-
-		} catch (final Exception exc) {
-			Logger.printError("failed to resize image " +
-					System.lineSeparator() + filePathString +
-					System.lineSeparator() + "to:" +
-					System.lineSeparator() + outputFilePathString);
-			Logger.printException(exc);
 		}
 		return success;
 	}

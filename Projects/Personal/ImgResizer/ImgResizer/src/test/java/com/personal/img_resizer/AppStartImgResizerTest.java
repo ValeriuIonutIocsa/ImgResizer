@@ -12,7 +12,7 @@ class AppStartImgResizerTest {
 	void testMain() {
 
 		final String[] args;
-		final int input = Integer.parseInt("1");
+		final int input = Integer.parseInt("2");
 		if (input == 1) {
 
 			final String originalInputFolderPathString = "D:\\tmp\\ImageResizer\\orig_input";
@@ -27,7 +27,33 @@ class AppStartImgResizerTest {
 					.copyFolder(originalInputFolderPathString, inputFolderPathString, true, true);
 			Assertions.assertTrue(copyFolderSuccess);
 
-			args = new String[] { "1920", inputFolderPathString, outputFolderPathString };
+			args = new String[] {
+					"1920",
+					inputFolderPathString,
+					outputFolderPathString,
+					"-verbose"
+			};
+
+		} else if (input == 2) {
+
+			final String originalInputFolderPathString = "D:\\tmp\\ImageResizer\\orig_input_iphone";
+			final String inputFolderPathString = "D:\\tmp\\ImageResizer\\input_iphone";
+			final String outputFolderPathString = "D:\\tmp\\ImageResizer\\output_iphone";
+
+			final boolean deleteFolderSuccess = FactoryFolderDeleter.getInstance()
+					.deleteFolder(inputFolderPathString, true, true);
+			Assertions.assertTrue(deleteFolderSuccess);
+
+			final boolean copyFolderSuccess = FactoryFolderCopier.getInstance()
+					.copyFolder(originalInputFolderPathString, inputFolderPathString, true, true);
+			Assertions.assertTrue(copyFolderSuccess);
+
+			args = new String[] {
+					"1920",
+					inputFolderPathString,
+					outputFolderPathString,
+					"-verbose"
+			};
 
 		} else {
 			throw new RuntimeException();
