@@ -154,9 +154,10 @@ final class AppStartImgResizer {
 					.createParentDirectories(outputFilePathString, false, true);
 			if (success) {
 
-				final String jpgFilePathString = PathUtils.computePathWoExt(filePathString) + ".jpg";
+				final String jpgFilePathString;
 				if (imageType != ImageType.JPG) {
 
+					jpgFilePathString = PathUtils.computePathWoExt(filePathString) + ".jpg";
 					success = false;
 					try {
 						ProcessStarter.setGlobalSearchPath("D:\\IVI_MISC\\Apps\\ImageMagick");
@@ -176,11 +177,15 @@ final class AppStartImgResizer {
 					} catch (final Exception exc) {
 						exc.printStackTrace();
 					}
+
+				} else {
+					jpgFilePathString = filePathString;
 				}
 				if (success) {
 
 					try {
-						final MetadataExporter metadataExporter = new MetadataExporter(jpgFilePathString, imageType);
+						final MetadataExporter metadataExporter =
+								new MetadataExporter(jpgFilePathString, imageType);
 						metadataExporter.work();
 
 						success = metadataExporter.isSuccess();
