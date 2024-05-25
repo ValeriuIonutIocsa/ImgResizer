@@ -2,9 +2,7 @@ ext {
     subProjectNames = [
             ':logger'
     ]
-    compileClassPaths = [
-            'commons-io:commons-io:2.13.0'
-    ]
+    compileClassPaths = []
     compileJarFilePaths = []
     testCompileClassPaths = []
     testCompileJarFilePaths = []

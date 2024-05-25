@@ -4,16 +4,18 @@ import java.io.PrintStream;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.utils.annotations.ApiMethod;
 import com.utils.string.characters.SpecialCharacterUtils;
+import com.utils.string.converters.ConverterInstant;
 
 public final class StrUtils {
 
@@ -186,6 +188,14 @@ public final class StrUtils {
 	}
 
 	@ApiMethod
+	public static String createAddressInterval(
+			final long startAddress,
+			final long endAddress) {
+
+		return StrUtils.createHexString(startAddress) + " - " + StrUtils.createHexString(endAddress);
+	}
+
+	@ApiMethod
 	public static String createHexString(
 			final long value) {
 
@@ -211,6 +221,40 @@ public final class StrUtils {
 
 		printStream.print("0x");
 		printStream.print(Long.toHexString(value));
+	}
+
+	@ApiMethod
+	public static String createPositiveHexString(
+			final long value) {
+
+		final StringBuilder stringBuilder = new StringBuilder();
+		appendPositiveHexString(value, stringBuilder);
+		return stringBuilder.toString();
+	}
+
+	@ApiMethod
+	public static void appendPositiveHexString(
+			final long value,
+			final StringBuilder stringBuilder) {
+
+		if (value >= 0) {
+
+			stringBuilder
+					.append("0x")
+					.append(Long.toHexString(value));
+		}
+	}
+
+	@ApiMethod
+	public static void printPositiveHexString(
+			final long value,
+			final PrintStream printStream) {
+
+		if (value > 0) {
+
+			printStream.print("0x");
+			printStream.print(Long.toHexString(value));
+		}
 	}
 
 	@ApiMethod
@@ -458,6 +502,7 @@ public final class StrUtils {
 	@ApiMethod
 	public static String timeSToString(
 			final double time) {
+
 		return doubleToString(time, 0, 2, true) + "s";
 	}
 
@@ -475,18 +520,21 @@ public final class StrUtils {
 	@ApiMethod
 	public static String timeMsToString(
 			final double time) {
+
 		return doubleToString(time, 0, 2, true) + "ms";
 	}
 
 	@ApiMethod
 	public static String timeUsToString(
 			final double time) {
+
 		return doubleToString(time, 0, 2, true) + SpecialCharacterUtils.MU + "s";
 	}
 
 	@ApiMethod
 	public static String timeNsToString(
 			final double time) {
+
 		return doubleToString(time, 0, 2, true) + "ns";
 	}
 
@@ -722,6 +770,7 @@ public final class StrUtils {
 	@ApiMethod
 	public static String reflectionToString(
 			final Object object) {
+
 		return ReflectionToString.work(object);
 	}
 
@@ -772,23 +821,87 @@ public final class StrUtils {
 	}
 
 	@ApiMethod
+	public static String removePrefix(
+			final String str,
+			final String prefix) {
+
+		final String resultStr;
+		if (str != null) {
+
+			if (str.startsWith(prefix)) {
+				resultStr = str.substring(prefix.length());
+			} else {
+				resultStr = str;
+			}
+
+		} else {
+			resultStr = null;
+		}
+		return resultStr;
+	}
+
+	@ApiMethod
+	public static String removeSuffix(
+			final String str,
+			final String suffix) {
+
+		final String resultStr;
+		if (str != null) {
+
+			if (str.endsWith(suffix)) {
+				resultStr = str.substring(0, str.length() - suffix.length());
+			} else {
+				resultStr = str;
+			}
+
+		} else {
+			resultStr = null;
+		}
+		return resultStr;
+	}
+
+	@ApiMethod
 	public static String createDateTimeString() {
-		return new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+
+		final DateTimeFormatter dateTimeFormatter =
+				DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")
+						.withLocale(Locale.US).withZone(ZoneId.systemDefault());
+		return dateTimeFormatter.format(Instant.now());
 	}
 
 	@ApiMethod
 	public static String createPathDateTimeString() {
-		return new SimpleDateFormat("dd_MMM_yyyy__hh_mm_ss_SSS__zzz", Locale.US).format(new Date());
+
+		final DateTimeFormatter dateTimeFormatter =
+				DateTimeFormatter.ofPattern("dd_MMM_yyyy__HH_mm_ss_SSS__z")
+						.withLocale(Locale.US).withZone(ZoneId.systemDefault());
+		String pathDateTimeString = dateTimeFormatter.format(Instant.now());
+		pathDateTimeString = StringUtils.replaceChars(pathDateTimeString, '/', '_');
+		pathDateTimeString = StringUtils.replaceChars(pathDateTimeString, ';', '_');
+		return pathDateTimeString;
 	}
 
 	@ApiMethod
 	public static String createDisplayDateTimeString() {
-		return new SimpleDateFormat("dd MMM yyyy, hh:mm:ss zzz", Locale.US).format(new Date());
+
+		final Instant instant = Instant.now();
+		return createDisplayDateTimeString(instant);
+	}
+
+	@ApiMethod
+	public static String createDisplayDateTimeString(
+			final Instant instant) {
+
+		final DateTimeFormatter dateTimeFormatter =
+				DateTimeFormatter.ofPattern(ConverterInstant.FULL_DATE_FORMAT)
+						.withLocale(Locale.US).withZone(ZoneId.systemDefault());
+		return dateTimeFormatter.format(instant);
 	}
 
 	@ApiMethod
 	public static boolean parseBooleanFromIntString(
 			final String booleanString) {
+
 		return "1".equals(booleanString);
 	}
 
@@ -895,7 +1008,7 @@ public final class StrUtils {
 			final String string) {
 
 		final int value;
-		if (StringUtils.startsWith(string, "0x")) {
+		if (StringUtils.startsWithIgnoreCase(string, "0x")) {
 			value = StrUtils.tryParsePositiveIntFromHexString(string);
 		} else {
 			value = StrUtils.tryParsePositiveInt(string);
@@ -958,7 +1071,7 @@ public final class StrUtils {
 			final String string) {
 
 		final long value;
-		if (StringUtils.startsWith(string, "0x")) {
+		if (StringUtils.startsWithIgnoreCase(string, "0x")) {
 			value = StrUtils.tryParsePositiveLongFromHexString(string);
 		} else {
 			value = StrUtils.tryParsePositiveLong(string);
@@ -1034,6 +1147,29 @@ public final class StrUtils {
 			byteArray = new byte[] {};
 		}
 		return byteArray;
+	}
+
+	@ApiMethod
+	public static String capitalizeFirstLetters(
+			final String str) {
+
+		String result = null;
+		if (str != null) {
+
+			final StringBuilder sbResult = new StringBuilder();
+			final String[] strPartArray = StringUtils.split(str);
+			for (int i = 0; i < strPartArray.length; i++) {
+
+				final String strPart = strPartArray[i];
+				sbResult.append(StringUtils.capitalize(strPart));
+				if (i < strPartArray.length - 1) {
+					sbResult.append(' ');
+				}
+			}
+			result = sbResult.toString();
+
+		}
+		return result;
 	}
 
 	@ApiMethod

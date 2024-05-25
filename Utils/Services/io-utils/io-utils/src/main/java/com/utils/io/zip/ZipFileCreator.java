@@ -72,6 +72,7 @@ public class ZipFileCreator {
 		} else {
 			if (IoUtils.fileExists(srcFilePathString)) {
 				keepGoing = true;
+
 			} else {
 				Logger.printWarning("the source file does not exist:" +
 						System.lineSeparator() + srcFilePathString);

@@ -18,14 +18,14 @@ import com.utils.string.StrUtils;
 
 class MetadataExporter {
 
-	private static final Pattern jpgImageWidthPattern =
+	private static final Pattern JPG_IMAGE_WIDTH_PATTERN =
 			Pattern.compile("<File:ImageWidth>(.*)</File:ImageWidth>");
-	private static final Pattern jpgImageHeightPattern =
+	private static final Pattern JPG_IMAGE_HEIGHT_PATTERN =
 			Pattern.compile("<File:ImageHeight>(.*)</File:ImageHeight>");
 
-	private static final Pattern pngImageWidthPattern =
+	private static final Pattern PNG_IMAGE_WIDTH_PATTERN =
 			Pattern.compile("<PNG:ImageWidth>(.*)</PNG:ImageWidth>");
-	private static final Pattern pngImageHeightPattern =
+	private static final Pattern PNG_IMAGE_HEIGHT_PATTERN =
 			Pattern.compile("<PNG:ImageHeight>(.*)</PNG:ImageHeight>");
 
 	private final String filePathString;
@@ -72,13 +72,13 @@ class MetadataExporter {
 
 				if (imageType == ImageType.JPG || imageType == ImageType.HEIC) {
 
-					final Matcher imageWidthMatcher = jpgImageWidthPattern.matcher(trimmedLine);
+					final Matcher imageWidthMatcher = JPG_IMAGE_WIDTH_PATTERN.matcher(trimmedLine);
 					if (imageWidthMatcher.matches()) {
 
 						final String firstGroup = imageWidthMatcher.group(1);
 						imageWidth = StrUtils.tryParsePositiveInt(firstGroup);
 					}
-					final Matcher imageHeightMatcher = jpgImageHeightPattern.matcher(trimmedLine);
+					final Matcher imageHeightMatcher = JPG_IMAGE_HEIGHT_PATTERN.matcher(trimmedLine);
 					if (imageHeightMatcher.matches()) {
 
 						final String firstGroup = imageHeightMatcher.group(1);
@@ -87,13 +87,13 @@ class MetadataExporter {
 
 				} else if (imageType == ImageType.PNG) {
 
-					final Matcher imageWidthMatcher = pngImageWidthPattern.matcher(trimmedLine);
+					final Matcher imageWidthMatcher = PNG_IMAGE_WIDTH_PATTERN.matcher(trimmedLine);
 					if (imageWidthMatcher.matches()) {
 
 						final String firstGroup = imageWidthMatcher.group(1);
 						imageWidth = StrUtils.tryParsePositiveInt(firstGroup);
 					}
-					final Matcher imageHeightMatcher = pngImageHeightPattern.matcher(trimmedLine);
+					final Matcher imageHeightMatcher = PNG_IMAGE_HEIGHT_PATTERN.matcher(trimmedLine);
 					if (imageHeightMatcher.matches()) {
 
 						final String firstGroup = imageHeightMatcher.group(1);

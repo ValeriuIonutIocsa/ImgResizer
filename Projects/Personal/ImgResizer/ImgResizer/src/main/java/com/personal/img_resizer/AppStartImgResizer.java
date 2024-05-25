@@ -1,10 +1,11 @@
 package com.personal.img_resizer;
 
 import java.io.File;
-import java.nio.file.Files;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.im4java.core.ConvertCmd;
 import org.im4java.core.IMOperation;
 import org.im4java.process.ProcessStarter;
@@ -89,8 +90,14 @@ final class AppStartImgResizer {
 		if (IoUtils.directoryExists(inputPathString)) {
 
 			boolean foundImages = false;
-			final List<String> filePathStringList =
-					ListFileUtils.listFilesRecursively(inputPathString, Files::isRegularFile);
+			final List<String> filePathStringList = new ArrayList<>();
+			ListFileUtils.visitFilesRecursively(inputPathString,
+					dirPath -> {
+					},
+					filePath -> {
+						final String filePathString = filePath.toString();
+						filePathStringList.add(filePathString);
+					});
 			for (final String filePathString : filePathStringList) {
 
 				final ImageType imageType = FactoryImageType.computeImageType(filePathString);
@@ -175,7 +182,7 @@ final class AppStartImgResizer {
 						success = true;
 
 					} catch (final Exception exc) {
-						exc.printStackTrace();
+						Logger.printException(exc);
 					}
 
 				} else {
@@ -200,6 +207,15 @@ final class AppStartImgResizer {
 								scale = "scale=" + length + ":-1";
 							}
 
+							final String[] commandPartArray = { "ffmpeg", "-i", jpgFilePathString,
+									"-movflags", "use_metadata_tags", "-map_metadata", "0",
+									"-vf", scale, outputFilePathString };
+							if (verbose) {
+
+								Logger.printProgress("executing command:");
+								Logger.printLine(StringUtils.join(commandPartArray, ' '));
+							}
+
 							final ProcessBuilder.Redirect processBuilderRedirect;
 							if (verbose) {
 								processBuilderRedirect = ProcessBuilder.Redirect.INHERIT;
@@ -208,9 +224,7 @@ final class AppStartImgResizer {
 							}
 
 							final Process process = new ProcessBuilder()
-									.command("ffmpeg", "-i", jpgFilePathString,
-											"-movflags", "use_metadata_tags", "-map_metadata", "0",
-											"-vf", scale, outputFilePathString)
+									.command(commandPartArray)
 									.directory(new File(outputFilePathString).getParentFile())
 									.redirectOutput(processBuilderRedirect)
 									.redirectError(processBuilderRedirect)

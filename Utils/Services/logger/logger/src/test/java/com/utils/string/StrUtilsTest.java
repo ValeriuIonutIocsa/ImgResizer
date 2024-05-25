@@ -1,20 +1,50 @@
 package com.utils.string;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.TimeZone;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
-import org.junit.platform.commons.util.StringUtils;
 
 import com.utils.log.Logger;
 import com.utils.string.characters.SpecialCharacterUtils;
+import com.utils.string.converters.ConverterInstant;
+import com.utils.test.DynamicTestOption;
+import com.utils.test.DynamicTestOptions;
+import com.utils.test.DynamicTestSuite;
+import com.utils.test.TestInputUtils;
 
 class StrUtilsTest {
+
+	private static String timeZoneId;
+
+	@BeforeAll
+	static void beforeAll() {
+
+		timeZoneId = configureTimeZoneId();
+	}
+
+	private static String configureTimeZoneId() {
+
+		final String timeZoneId;
+		final int input = TestInputUtils.parseTestInputNumber("0");
+		if (input == 1) {
+			timeZoneId = "UTC";
+		} else if (input == 2) {
+			timeZoneId = "IST";
+		} else {
+			timeZoneId = null;
+		}
+		return timeZoneId;
+	}
 
 	@TestFactory
 	List<DynamicTest> testUnsignedIntToPaddedBinaryString() {
@@ -184,13 +214,124 @@ class StrUtilsTest {
 		Assertions.assertEquals(expectedString, nanoTimeString);
 	}
 
+	@TestFactory
+	List<DynamicTest> testRemovePrefix() {
+
+		final List<DynamicTest> dynamicTestList = new ArrayList<>();
+		final List<Integer> testCaseList = Arrays.asList(0, 1, 2, 3, 4);
+		if (testCaseList.contains(1)) {
+			dynamicTestList.add(DynamicTest.dynamicTest("1 (regular)",
+					() -> testRemovePrefixCommon("abc_RCSVMP", "abc_", "RCSVMP")));
+		}
+		if (testCaseList.contains(2)) {
+			dynamicTestList.add(DynamicTest.dynamicTest("2 (not starting with)",
+					() -> testRemovePrefixCommon("abc_RCSVMP", "bcd", "abc_RCSVMP")));
+		}
+		if (testCaseList.contains(3)) {
+			dynamicTestList.add(DynamicTest.dynamicTest("3 (empty string)",
+					() -> testRemovePrefixCommon("", "abc", "")));
+		}
+		if (testCaseList.contains(4)) {
+			dynamicTestList.add(DynamicTest.dynamicTest("4 (all null)",
+					() -> testRemovePrefixCommon(null, null, null)));
+		}
+		return dynamicTestList;
+	}
+
+	private static void testRemovePrefixCommon(
+			final String str,
+			final String prefix,
+			final String expectedResultStr) {
+
+		final String resultStr = StrUtils.removePrefix(str, prefix);
+		Assertions.assertEquals(expectedResultStr, resultStr);
+	}
+
+	@TestFactory
+	List<DynamicTest> testRemoveSuffix() {
+
+		final List<DynamicTest> dynamicTestList = new ArrayList<>();
+		final List<Integer> testCaseList = Arrays.asList(0, 1, 2, 3, 4);
+		if (testCaseList.contains(1)) {
+			dynamicTestList.add(DynamicTest.dynamicTest("1 (regular)",
+					() -> testRemoveSuffixCommon("RCSVMP_nvm", "_nvm", "RCSVMP")));
+		}
+		if (testCaseList.contains(2)) {
+			dynamicTestList.add(DynamicTest.dynamicTest("2 (not ending with)",
+					() -> testRemoveSuffixCommon("RCSVMP_nvm", "_abc", "RCSVMP_nvm")));
+		}
+		if (testCaseList.contains(3)) {
+			dynamicTestList.add(DynamicTest.dynamicTest("3 (empty string)",
+					() -> testRemoveSuffixCommon("", "abc", "")));
+		}
+		if (testCaseList.contains(4)) {
+			dynamicTestList.add(DynamicTest.dynamicTest("4 (all null)",
+					() -> testRemoveSuffixCommon(null, null, null)));
+		}
+		return dynamicTestList;
+	}
+
+	private static void testRemoveSuffixCommon(
+			final String str,
+			final String suffix,
+			final String expectedResultStr) {
+
+		final String resultStr = StrUtils.removeSuffix(str, suffix);
+		Assertions.assertEquals(expectedResultStr, resultStr);
+	}
+
 	@Test
 	void testCreateDateTimeString() {
+
+		if (timeZoneId != null) {
+			TimeZone.setDefault(TimeZone.getTimeZone(timeZoneId));
+		}
 
 		final String dateTimeString = StrUtils.createDateTimeString();
 		Assertions.assertFalse(StringUtils.isBlank(dateTimeString));
 
 		Logger.printNewLine();
 		Logger.printLine(dateTimeString);
+	}
+
+	@TestFactory
+	List<DynamicTest> testCreateDisplayDateTimeString() {
+
+		if (timeZoneId != null) {
+			TimeZone.setDefault(TimeZone.getTimeZone(timeZoneId));
+		}
+
+		final DynamicTestOptions<Instant> instantDynamicTestOptions =
+				new DynamicTestOptions<>("instant string", 1);
+
+		instantDynamicTestOptions.getDynamicTestOptionList().add(new DynamicTestOption<>(1, "current instant",
+				Instant.now()));
+
+		instantDynamicTestOptions.getDynamicTestOptionList().add(new DynamicTestOption<>(11, "full instant 1",
+				ConverterInstant.stringToInstant("2024-Feb-18 18:23:19.674 UTC")));
+		instantDynamicTestOptions.getDynamicTestOptionList().add(new DynamicTestOption<>(12, "full instant 2",
+				ConverterInstant.stringToInstant("2024-Feb-18 18:23:19.674 EET")));
+		instantDynamicTestOptions.getDynamicTestOptionList().add(new DynamicTestOption<>(13, "full instant 3",
+				ConverterInstant.stringToInstant("2024-Apr-22 18:32:00.833 IST")));
+		instantDynamicTestOptions.getDynamicTestOptionList().add(new DynamicTestOption<>(14, "full instant 4",
+				ConverterInstant.stringToInstant("2024-Apr-22 18:32:00.833 Asia/Kolkata")));
+
+		instantDynamicTestOptions.getDynamicTestOptionList().add(new DynamicTestOption<>(21, "simple instant",
+				ConverterInstant.stringToInstant("2020-Feb-28 18:07:38")));
+
+		final DynamicTestSuite dynamicTestSuite = new DynamicTestSuite(DynamicTestSuite.Mode.ALL,
+				() -> testCreateDisplayDateTimeStringCommon(instantDynamicTestOptions), instantDynamicTestOptions);
+
+		return dynamicTestSuite.createDynamicTestList();
+	}
+
+	private static void testCreateDisplayDateTimeStringCommon(
+			final DynamicTestOptions<Instant> instantDynamicTestOptions) {
+
+		final Instant instant = instantDynamicTestOptions.computeValue();
+		final String instantString = StrUtils.createDisplayDateTimeString(instant);
+		Assertions.assertFalse(StringUtils.isBlank(instantString));
+
+		Logger.printLine("instantString: " + instantString);
 	}
 }

@@ -14,6 +14,7 @@ public final class RegexUtils {
 	public static final Pattern NOT_WHITE_SPACE_PATTERN = Pattern.compile("\\S+");
 	public static final Pattern WORD_PATTERN = Pattern.compile("\\w+");
 	public static final Pattern NOT_WORD_PATTERN = Pattern.compile("\\W+");
+	public static final Pattern DIGITS_ONLY_PATTERN = Pattern.compile("\\d+");
 
 	private RegexUtils() {
 	}

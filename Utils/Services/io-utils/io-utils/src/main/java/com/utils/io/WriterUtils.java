@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 import com.utils.io.folder_creators.FactoryFolderCreator;
 import com.utils.io.ro_flag_clearers.FactoryReadOnlyFlagClearer;
@@ -56,7 +57,7 @@ public final class WriterUtils {
 			final String filePathString) {
 
 		try {
-			tryStringToFile(string, charset, filePathString);
+			stringToFile(string, charset, filePathString);
 
 		} catch (final Exception exc) {
 			Logger.printError("failed to write string to file:" +
@@ -72,8 +73,32 @@ public final class WriterUtils {
 
 		FactoryFolderCreator.getInstance().createParentDirectories(filePathString, false, true);
 		FactoryReadOnlyFlagClearer.getInstance().clearReadOnlyFlagFile(filePathString, false, true);
+
 		try (PrintStream printStream = StreamUtils.openPrintStream(filePathString, false, charset)) {
 			printStream.print(string);
+		}
+	}
+
+	public static void tryLineListToFile(
+			final List<String> lineList,
+			final Charset charset,
+			final String filePathString) {
+
+		FactoryFolderCreator.getInstance().createParentDirectories(filePathString, false, true);
+		FactoryReadOnlyFlagClearer.getInstance().clearReadOnlyFlagFile(filePathString, false, true);
+
+		try (PrintStream printStream = StreamUtils.openPrintStream(filePathString, false, charset)) {
+
+			for (final String line : lineList) {
+
+				printStream.print(line);
+				printStream.println();
+			}
+
+		} catch (final Exception exc) {
+			Logger.printError("failed to write line list to file:" +
+					System.lineSeparator() + filePathString);
+			Logger.printException(exc);
 		}
 	}
 }
