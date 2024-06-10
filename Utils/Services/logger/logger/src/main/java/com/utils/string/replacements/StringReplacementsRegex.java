@@ -37,8 +37,8 @@ public class StringReplacementsRegex implements StringReplacements {
 		String resultStr = str;
 		for (final StringReplacementsRegexData stringReplacementsRegexData : stringReplacementsRegexDataList) {
 
-			final Pattern searchPattern = stringReplacementsRegexData.getSearchPattern();
-			final String replacementString = stringReplacementsRegexData.getReplacementString();
+			final Pattern searchPattern = stringReplacementsRegexData.searchPattern();
+			final String replacementString = stringReplacementsRegexData.replacementString();
 			resultStr = searchPattern.matcher(resultStr).replaceAll(replacementString);
 		}
 		return resultStr;

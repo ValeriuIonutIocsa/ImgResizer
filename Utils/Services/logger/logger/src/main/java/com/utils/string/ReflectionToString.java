@@ -112,12 +112,10 @@ final class ReflectionToString {
 		} else if (fieldValue.getClass().isArray()) {
 			appendArray(fieldValue, objList, sb);
 
-		} else if (fieldValue instanceof Collection<?>) {
-			final Collection<?> collection = (Collection<?>) fieldValue;
+		} else if (fieldValue instanceof final Collection<?> collection) {
 			appendCollection(collection, objList, sb);
 
-		} else if (fieldValue instanceof Map<?, ?>) {
-			final Map<?, ?> map = (Map<?, ?>) fieldValue;
+		} else if (fieldValue instanceof final Map<?, ?> map) {
 			appendMap(map, objList, sb);
 
 		} else {

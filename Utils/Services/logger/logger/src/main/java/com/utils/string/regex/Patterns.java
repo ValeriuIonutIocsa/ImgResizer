@@ -1,5 +1,6 @@
 package com.utils.string.regex;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.w3c.dom.Element;
@@ -8,7 +9,8 @@ import com.utils.string.StrUtils;
 
 public class Patterns implements Serializable {
 
-	private static final long serialVersionUID = -3158472204665180250L;
+	@Serial
+    private static final long serialVersionUID = -3158472204665180250L;
 
 	private PatternWithCase exclusionPattern;
 	private PatternWithCase inclusionPattern;

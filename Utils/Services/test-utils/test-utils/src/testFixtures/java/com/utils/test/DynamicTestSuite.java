@@ -78,7 +78,7 @@ public class DynamicTestSuite {
 					dynamicTestOptions.getDynamicTestOptionList();
 			for (final DynamicTestOption<?> dynamicTestOption : dynamicTestOptionList) {
 
-				final int index = dynamicTestOption.getIndex();
+				final int index = dynamicTestOption.index();
 				dynamicTestOptions.setSelectedOptionIndex(index);
 				indexStack.push(index);
 				addDynamicTestsRec(optionsIndex + 1, indexStack, dynamicTestList);

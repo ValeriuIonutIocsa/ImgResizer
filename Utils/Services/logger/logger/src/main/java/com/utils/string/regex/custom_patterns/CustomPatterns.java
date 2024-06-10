@@ -68,7 +68,7 @@ public class CustomPatterns {
 			for (final CustomPattern customPattern : andPatternList) {
 				customPattern.appendPatternString(sbAndPatternString);
 			}
-			if (sbAndPatternString.length() > 0) {
+			if (!sbAndPatternString.isEmpty()) {
 
 				sbAndPatternString.append(".*");
 				final String andPatternString = sbAndPatternString.toString();

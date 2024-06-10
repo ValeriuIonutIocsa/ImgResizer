@@ -27,7 +27,7 @@ public class DynamicTestOptions<
 
 		String displayName = name + " " + selectedOptionIndex;
 		final DynamicTestOption<ObjectT> selectedDynamicTestOption = computeSelectedDynamicTestOption();
-		final String description = selectedDynamicTestOption.getDescription();
+		final String description = selectedDynamicTestOption.description();
 		if (description != null && !description.isBlank()) {
 			displayName += " " + description;
 		}
@@ -37,7 +37,7 @@ public class DynamicTestOptions<
 	public ObjectT computeValue() {
 
 		final DynamicTestOption<ObjectT> selectedDynamicTestOption = computeSelectedDynamicTestOption();
-		return selectedDynamicTestOption.getValue();
+		return selectedDynamicTestOption.value();
 	}
 
 	private DynamicTestOption<ObjectT> computeSelectedDynamicTestOption() {
@@ -45,7 +45,7 @@ public class DynamicTestOptions<
 		DynamicTestOption<ObjectT> selectedDynamicTestOption = null;
 		for (final DynamicTestOption<ObjectT> dynamicTestOption : dynamicTestOptionList) {
 
-			final int index = dynamicTestOption.getIndex();
+			final int index = dynamicTestOption.index();
 			if (index == selectedOptionIndex) {
 				selectedDynamicTestOption = dynamicTestOption;
 			}

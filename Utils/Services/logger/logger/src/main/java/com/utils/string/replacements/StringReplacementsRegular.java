@@ -33,8 +33,8 @@ public class StringReplacementsRegular implements StringReplacements {
 		String resultStr = str;
 		for (final StringReplacementsRegularData stringReplacementsRegularData : stringReplacementsRegularDataList) {
 
-			final String searchString = stringReplacementsRegularData.getSearchString();
-			final String replacementString = stringReplacementsRegularData.getReplacementString();
+			final String searchString = stringReplacementsRegularData.searchString();
+			final String replacementString = stringReplacementsRegularData.replacementString();
 			resultStr = StringUtils.replace(resultStr, searchString, replacementString);
 		}
 		return resultStr;

@@ -1,5 +1,6 @@
 package com.utils.log.messages;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
@@ -8,7 +9,8 @@ import com.utils.string.StrUtils;
 
 public class Message implements Serializable, Comparable<Message> {
 
-	private static final long serialVersionUID = 4096644278551613552L;
+	@Serial
+    private static final long serialVersionUID = 4096644278551613552L;
 
 	private final MessageType messageType;
 	private final int displayOrder;

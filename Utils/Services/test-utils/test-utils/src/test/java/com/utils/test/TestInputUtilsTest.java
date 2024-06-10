@@ -39,18 +39,9 @@ class TestInputUtilsTest {
 		Assertions.assertEquals(testParseTestInputBooleanData.expectedInputBoolean, inputBoolean);
 	}
 
-	static class TestParseTestInputBooleanData {
-
-		final String inputBooleanString;
-		final boolean expectedInputBoolean;
-
-		TestParseTestInputBooleanData(
-				final String inputBooleanString,
-				final boolean expectedInputBoolean) {
-
-			this.inputBooleanString = inputBooleanString;
-			this.expectedInputBoolean = expectedInputBoolean;
-		}
+	private record TestParseTestInputBooleanData(
+			String inputBooleanString,
+			boolean expectedInputBoolean) {
 	}
 
 	@TestFactory
@@ -84,17 +75,8 @@ class TestInputUtilsTest {
 		Assertions.assertEquals(testParseTestInputNumberData.expectedInputNumber, inputNumber);
 	}
 
-	static class TestParseTestInputNumberData {
-
-		final String inputNumberString;
-		final int expectedInputNumber;
-
-		TestParseTestInputNumberData(
-				final String inputNumberString,
-				final int expectedInputNumber) {
-
-			this.inputNumberString = inputNumberString;
-			this.expectedInputNumber = expectedInputNumber;
-		}
+	private record TestParseTestInputNumberData(
+			String inputNumberString,
+			int expectedInputNumber) {
 	}
 }
