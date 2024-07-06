@@ -3,11 +3,14 @@ package com.utils.string.converters;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
+import com.utils.annotations.ApiMethod;
+
 public final class ConverterByteArray {
 
 	private ConverterByteArray() {
 	}
 
+	@ApiMethod
 	public static String byteArrayToString(
 			final byte[] bytes) {
 
@@ -15,6 +18,7 @@ public final class ConverterByteArray {
 		return new String(encodedBytes, StandardCharsets.UTF_8);
 	}
 
+	@ApiMethod
 	public static byte[] parseByteArray(
 			final String str) {
 

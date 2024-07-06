@@ -163,15 +163,11 @@ public final class PathUtils {
 	public static String computeFileName(
 			final Path path) {
 
-		final String fileName;
-		if (path == null) {
-			fileName = null;
+		String fileName = null;
+		if (path != null) {
 
-		} else {
 			final Path fileNamePath = path.getFileName();
-			if (fileNamePath == null) {
-				fileName = null;
-			} else {
+			if (fileNamePath != null) {
 				fileName = fileNamePath.toString();
 			}
 		}
@@ -200,16 +196,12 @@ public final class PathUtils {
 	public static String computeFileName(
 			final String pathString) {
 
-		final String fileName;
-		if (pathString == null) {
-			fileName = null;
+		String fileName = null;
+		if (pathString != null) {
 
-		} else {
 			final Path path = Paths.get(pathString);
 			final Path fileNamePath = path.getFileName();
-			if (fileNamePath == null) {
-				fileName = null;
-			} else {
+			if (fileNamePath != null) {
 				fileName = fileNamePath.toString();
 			}
 		}
@@ -230,17 +222,20 @@ public final class PathUtils {
 
 		String folderPathString = null;
 		try {
-			Path parentPath = Paths.get(pathString);
-			for (int i = 0; i < levelsToGoUp; i++) {
+			if (pathString != null) {
 
-				if (parentPath != null) {
-					parentPath = parentPath.getParent();
-				} else {
-					break;
+				Path parentPath = Paths.get(pathString);
+				for (int i = 0; i < levelsToGoUp; i++) {
+
+					if (parentPath != null) {
+						parentPath = parentPath.getParent();
+					} else {
+						break;
+					}
 				}
-			}
-			if (parentPath != null) {
-				folderPathString = parentPath.toString();
+				if (parentPath != null) {
+					folderPathString = parentPath.toString();
+				}
 			}
 
 		} catch (final Exception exc) {

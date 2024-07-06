@@ -2,6 +2,7 @@ package com.utils.inst;
 
 import org.github.jamm.MemoryMeter;
 
+import com.utils.annotations.ApiMethod;
 import com.utils.log.Logger;
 import com.utils.string.size.SizeUtils;
 
@@ -10,6 +11,7 @@ public final class InstrumentationUtils {
 	private InstrumentationUtils() {
 	}
 
+	@ApiMethod
 	public static void printObjectMemoryUsage(
 			final Object object) {
 

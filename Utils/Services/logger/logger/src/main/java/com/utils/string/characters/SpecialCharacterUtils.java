@@ -2,6 +2,8 @@ package com.utils.string.characters;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.utils.annotations.ApiMethod;
+
 public final class SpecialCharacterUtils {
 
 	public static final char MU = 'μ';
@@ -11,6 +13,7 @@ public final class SpecialCharacterUtils {
 	private SpecialCharacterUtils() {
 	}
 
+	@ApiMethod
 	public static String createHtmlString(
 			final String string) {
 

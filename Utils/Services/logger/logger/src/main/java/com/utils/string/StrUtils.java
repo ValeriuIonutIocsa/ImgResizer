@@ -712,6 +712,14 @@ public final class StrUtils {
 
 	@ApiMethod
 	public static String durationToString(
+			final Instant start) {
+
+		final Duration duration = Duration.between(start, Instant.now());
+		return durationToString(duration);
+	}
+
+	@ApiMethod
+	public static String durationToString(
 			final Duration duration) {
 
 		final StringBuilder stringBuilder = new StringBuilder();

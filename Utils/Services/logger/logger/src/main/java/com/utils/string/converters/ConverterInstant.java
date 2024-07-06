@@ -5,6 +5,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
+import com.utils.annotations.ApiMethod;
 import com.utils.string.StrUtils;
 
 public final class ConverterInstant {
@@ -15,6 +16,7 @@ public final class ConverterInstant {
 	private ConverterInstant() {
 	}
 
+	@ApiMethod
 	public static String instantToString(
 			final Instant instant) {
 
@@ -22,6 +24,7 @@ public final class ConverterInstant {
 		return String.valueOf(epochMilli);
 	}
 
+	@ApiMethod
 	public static Instant stringToInstant(
 			final String instantString) {
 

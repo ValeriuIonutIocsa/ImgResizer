@@ -23,10 +23,10 @@ class CustomPatternsTest {
 
 				final List<List<CustomPattern>> andPatternListList = new ArrayList<>();
 				final List<CustomPattern> andPatternList = new ArrayList<>();
-				andPatternList.add(new CustomPatternUnixRegex(".*@vitesco.com", false, true));
+				andPatternList.add(new CustomPatternUnixRegex(".*@test.com", false, true));
 				andPatternList.add(new CustomPatternUnixRegex(".*email.*", true, true));
 				andPatternListList.add(andPatternList);
-				testCheckMatchesPatternsCommon(andPatternListList, "abcd@vitesco.com", true);
+				testCheckMatchesPatternsCommon(andPatternListList, "abcd@test.com", true);
 			}));
 		}
 		if (testCaseList.contains(2)) {
@@ -34,10 +34,10 @@ class CustomPatternsTest {
 
 				final List<List<CustomPattern>> andPatternListList = new ArrayList<>();
 				final List<CustomPattern> andPatternList = new ArrayList<>();
-				andPatternList.add(new CustomPatternUnixRegex(".*@vitesco.com", false, true));
+				andPatternList.add(new CustomPatternUnixRegex(".*@test.com", false, true));
 				andPatternList.add(new CustomPatternUnixRegex(".*email.*", true, true));
 				andPatternListList.add(andPatternList);
-				testCheckMatchesPatternsCommon(andPatternListList, "abcdemailbcd@vitesco.com", false);
+				testCheckMatchesPatternsCommon(andPatternListList, "abcdemailbcd@test.com", false);
 			}));
 		}
 		return dynamicTestList;

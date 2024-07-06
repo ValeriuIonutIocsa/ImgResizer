@@ -28,10 +28,10 @@ class FactoryProxySettingsTest {
 		Logger.printProgress("generating proxy settings file:");
 		Logger.printLine(proxySettingsPathString);
 
-		final String httpHost = "cias3basic.conti.de";
+		final String httpHost = "host.ip.address";
 		final int httpPort = 8_080;
-		final String httpUsername = "uid39522";
-		final String httpPassword = "crocrocro_010";
+		final String httpUsername = "username";
+		final String httpPassword = "password";
 
 		final Properties properties = new Properties();
 		properties.setProperty("httpHost", httpHost);

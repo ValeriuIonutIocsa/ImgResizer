@@ -13,7 +13,6 @@ import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.utils.io.PathUtils;
 import com.utils.io.ReaderUtils;
 import com.utils.io.StreamUtils;
 import com.utils.log.Logger;
@@ -24,9 +23,9 @@ class EncryptionUtilsTest {
 	void testEncryptFile() throws Exception {
 
 		final String inputFilePathString =
-				"\\\\vt1.vitesco.com\\SMT\\did01438\\Common\\uid39522\\T1LibValSettings.xml";
+				"D:\\IVI_MISC\\Tmp\\io-utils\\crypt\\test.txt";
 		final String outputFilePathString =
-				"\\\\vt1.vitesco.com\\SMT\\did01438\\Common\\uid39522\\T1LibValSettings.encrypted2";
+				"D:\\IVI_MISC\\Tmp\\io-utils\\crypt\\test.encrypted";
 
 		final Cipher encryptCipher = EncryptionUtils.createEncryptCipher();
 		try (InputStream inputStream = StreamUtils.openBufferedInputStream(inputFilePathString);
@@ -41,9 +40,9 @@ class EncryptionUtilsTest {
 	void testDecryptFile() throws Exception {
 
 		final String inputFilePathString =
-				"\\\\vt1.vitesco.com\\SMT\\did01438\\Common\\uid39522\\T1LibValSettings.encrypted";
+				"D:\\IVI_MISC\\Tmp\\io-utils\\crypt\\test.encrypted";
 		final String outputFilePathString =
-				"\\\\vt1.vitesco.com\\SMT\\did01438\\Common\\uid39522\\T1LibValSettings.xml";
+				"D:\\IVI_MISC\\Tmp\\io-utils\\crypt\\test.txt";
 
 		final Cipher decryptCipher = EncryptionUtils.createDecryptCipher();
 		try (InputStream inputStream = new CipherInputStream(
@@ -60,7 +59,7 @@ class EncryptionUtilsTest {
 		final String originalString = "how to do in java.com";
 
 		final String encryptedFilePathString =
-				PathUtils.computePath(PathUtils.createRootPath(), "tmp", "test.encrypted");
+				"D:\\IVI_MISC\\Tmp\\io-utils\\crypt\\test.encrypted";
 		Logger.printProgress("generating encrypted file:");
 		Logger.printLine(encryptedFilePathString);
 
@@ -74,6 +73,7 @@ class EncryptionUtilsTest {
 		final Cipher decryptCipher = EncryptionUtils.createDecryptCipher();
 		try (InputStream inputStream = new CipherInputStream(
 				StreamUtils.openBufferedInputStream(encryptedFilePathString), decryptCipher)) {
+
 			decryptedString = ReaderUtils.inputStreamToString(inputStream, StandardCharsets.UTF_8.name());
 		}
 
@@ -89,13 +89,14 @@ class EncryptionUtilsTest {
 		properties.put(key, value);
 
 		final String encryptedFilePathString =
-				PathUtils.computePath(PathUtils.createRootPath(), "tmp", "test_properties.encrypted");
+				"D:\\IVI_MISC\\Tmp\\io-utils\\crypt\\test_properties.encrypted";
 		Logger.printProgress("generating encrypted file:");
 		Logger.printLine(encryptedFilePathString);
 
 		final Cipher encryptCipher = EncryptionUtils.createEncryptCipher();
 		try (OutputStream outputStream = new CipherOutputStream(
 				StreamUtils.openOutputStream(encryptedFilePathString), encryptCipher)) {
+
 			properties.store(outputStream, "test properties file for encryption");
 		}
 
@@ -103,6 +104,7 @@ class EncryptionUtilsTest {
 		final Cipher decryptCipher = EncryptionUtils.createDecryptCipher();
 		try (InputStream inputStream = new CipherInputStream(
 				StreamUtils.openInputStream(encryptedFilePathString), decryptCipher)) {
+
 			decryptedProperties.load(inputStream);
 		}
 

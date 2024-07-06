@@ -5,11 +5,14 @@ import java.io.ByteArrayOutputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import com.utils.annotations.ApiMethod;
+
 public final class GzipCompressionUtils {
 
 	private GzipCompressionUtils() {
 	}
 
+	@ApiMethod
 	public static byte[] compress(
 			final byte[] uncompressedData) {
 
@@ -29,6 +32,7 @@ public final class GzipCompressionUtils {
 		return compressedData;
 	}
 
+	@ApiMethod
 	public static byte[] decompress(
 			final byte[] compressedData) {
 

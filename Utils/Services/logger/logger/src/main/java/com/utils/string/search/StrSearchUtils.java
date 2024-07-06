@@ -1,10 +1,13 @@
 package com.utils.string.search;
 
+import com.utils.annotations.ApiMethod;
+
 public final class StrSearchUtils {
 
 	private StrSearchUtils() {
 	}
 
+	@ApiMethod
 	public static int countOccurrencesOfSubstringInString(
 			final String string,
 			final String substring) {
