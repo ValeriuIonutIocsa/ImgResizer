@@ -16,12 +16,12 @@ class ZipFileCreator7zTest {
 		final String zipArchiveFilePathString;
 		final int input = StrUtils.tryParsePositiveInt("21");
 		if (input == 1) {
-			srcFilePathString = "D:\\IVI_MISC\\Misc\\mnf\\test\\ChosenPictures";
-			zipArchiveFilePathString = "D:\\IVI_MISC\\Misc\\mnf\\test\\ChosenPictures.zip";
+			srcFilePathString = "D:\\IVI\\Misc\\mnf\\test\\ChosenPictures";
+			zipArchiveFilePathString = "D:\\IVI\\Misc\\mnf\\test\\ChosenPictures.zip";
 
 		} else if (input == 11) {
-			srcFilePathString = "D:\\IVI_MISC\\Misc\\mnf\\test\\pic1.jpg";
-			zipArchiveFilePathString = "D:\\IVI_MISC\\Misc\\mnf\\test\\pic1.jpg.zip";
+			srcFilePathString = "D:\\IVI\\Misc\\mnf\\test\\pic1.jpg";
+			zipArchiveFilePathString = "D:\\IVI\\Misc\\mnf\\test\\pic1.jpg.zip";
 
 		} else if (input == 21) {
 			srcFilePathString = "C:\\IVI\\Poli";

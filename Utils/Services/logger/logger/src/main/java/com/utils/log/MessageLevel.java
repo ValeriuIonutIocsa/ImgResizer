@@ -7,5 +7,5 @@ public enum MessageLevel {
 	STATUS,
 	WARNING,
 	ERROR,
-	EXCEPTION
+	THROWABLE
 }

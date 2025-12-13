@@ -3,9 +3,11 @@ ext {
 }
 
 def configureSettings(
-        final String projectPath, final String rootDirPath, final String[] subProjectsRelativePaths) {
+        final String projectPath,
+        final String rootDirPath,
+        final String[] subProjectsRelativePaths) {
 
-    for (String subProjectsRelativePath : subProjectsRelativePaths) {
+    for (final String subProjectsRelativePath : subProjectsRelativePaths) {
 
         if (subProjectsRelativePath == null)
             continue
@@ -17,7 +19,8 @@ def configureSettings(
     rootProject.name = file(projectPath).name
 }
 
-def importSubProject(String subProjectPath) {
+def importSubProject(
+        final String subProjectPath) {
 
     final String name = ':' + file(subProjectPath).name
     include name

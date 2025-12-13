@@ -56,8 +56,8 @@ class FileMoverImpl implements FileMover {
 				success = true;
 			}
 
-		} catch (final Exception exc) {
-			Logger.printException(exc);
+		} catch (final Throwable throwable) {
+			Logger.printThrowable(throwable);
 		}
 
 		if (!success) {

@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class EnvProviderTest implements EnvProvider {
 
-	private static final Map<String, String> ENV = new HashMap<>();
+	public static final Map<String, String> ENV = new HashMap<>();
 
 	public static void setEnv(
 			final String name,

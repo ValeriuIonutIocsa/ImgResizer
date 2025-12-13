@@ -35,9 +35,9 @@ public class InputStreamReaderThread extends Thread {
 				readBytesHandler.handleReadByte(intByte);
 			}
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("error occurred while reading from the input stream");
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 	}
 }

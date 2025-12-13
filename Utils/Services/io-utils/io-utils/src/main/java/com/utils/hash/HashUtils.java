@@ -52,10 +52,10 @@ public final class HashUtils {
 				hash = StrUtils.byteArrayToHexString(hashByteArray);
 			}
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to compute hash of file:" +
 					System.lineSeparator() + filePathString);
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 		return hash;
 	}

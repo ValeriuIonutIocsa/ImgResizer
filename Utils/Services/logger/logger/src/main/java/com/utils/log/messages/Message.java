@@ -10,7 +10,7 @@ import com.utils.string.StrUtils;
 public class Message implements Serializable, Comparable<Message> {
 
 	@Serial
-    private static final long serialVersionUID = 4096644278551613552L;
+	private static final long serialVersionUID = 4096644278551613552L;
 
 	private final MessageType messageType;
 	private final int displayOrder;

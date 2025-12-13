@@ -8,7 +8,7 @@ public interface FolderCopier {
 	boolean copyFolder(
 			String srcFolderPathString,
 			String dstFolderPathString,
-			boolean deleteDirectoryBeforeCopying,
+			boolean deleteDstDirectoryBeforeCopying,
 			boolean verboseProgress,
 			boolean verboseError);
 }

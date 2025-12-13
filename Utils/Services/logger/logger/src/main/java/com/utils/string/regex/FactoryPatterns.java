@@ -24,15 +24,17 @@ public final class FactoryPatterns {
 
 	public static Patterns newInstance(
 			final String inclusionPatternString,
-			final String exclusionPatternString) {
+			final boolean inclusionPatternCaseSensitive,
+			final String exclusionPatternString,
+			final boolean exclusionPatternCaseSensitive) {
 
 		Patterns patterns = null;
 		final PatternWithCase inclusionPattern =
-				FactoryPatternWithCase.newInstance(inclusionPatternString, true);
+				FactoryPatternWithCase.newInstance(inclusionPatternString, inclusionPatternCaseSensitive);
 		if (inclusionPattern != null) {
 
 			final PatternWithCase exclusionPattern =
-					FactoryPatternWithCase.newInstance(exclusionPatternString, true);
+					FactoryPatternWithCase.newInstance(exclusionPatternString, exclusionPatternCaseSensitive);
 			patterns = new Patterns(exclusionPattern, inclusionPattern);
 		}
 		return patterns;

@@ -29,9 +29,9 @@ public final class FactoryLocalHostIpAddress {
 				}
 			}
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to create local host IP address");
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 		return localHostIpAddress;
 	}

@@ -7,6 +7,7 @@ import java.util.TimeZone;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 
 import com.utils.log.Logger;
@@ -80,5 +81,31 @@ class ConverterInstantTest {
 		final String secondInstantString = ConverterInstant.instantToString(secondInstant);
 
 		Assertions.assertEquals(instantString, secondInstantString);
+	}
+
+	@Test
+	void testStringToInstantWithFormat() {
+
+		final String instantString;
+		final String dateFormat;
+		final int input = TestInputUtils.parseTestInputNumber("101");
+		if (input == 1) {
+			instantString = "2024-Feb-18 18:23:19.674 UTC";
+			dateFormat = ConverterInstant.FULL_INSTANT_FORMAT;
+
+		} else if (input == 2) {
+			instantString = "2024-Feb-18 18:23:19.674";
+			dateFormat = ConverterInstant.SIMPLE_INSTANT_FORMAT;
+
+		} else {
+			throw new RuntimeException();
+		}
+
+		final Instant instant = ConverterInstant
+				.stringToInstantWithFormat(instantString, dateFormat);
+		Assertions.assertNotNull(instant);
+
+		Logger.printNewLine();
+		Logger.printLine("instant: " + instant);
 	}
 }

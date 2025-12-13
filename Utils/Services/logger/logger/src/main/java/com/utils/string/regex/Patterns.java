@@ -10,7 +10,7 @@ import com.utils.string.StrUtils;
 public class Patterns implements Serializable {
 
 	@Serial
-    private static final long serialVersionUID = -3158472204665180250L;
+	private static final long serialVersionUID = -3158472204665180250L;
 
 	private PatternWithCase exclusionPattern;
 	private PatternWithCase inclusionPattern;

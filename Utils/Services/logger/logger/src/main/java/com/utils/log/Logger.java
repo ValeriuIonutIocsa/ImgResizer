@@ -3,6 +3,9 @@ package com.utils.log;
 import java.time.Duration;
 import java.time.Instant;
 
+import org.apache.commons.lang3.Strings;
+import org.apache.commons.lang3.SystemUtils;
+
 import com.utils.annotations.ApiMethod;
 import com.utils.string.StrUtils;
 import com.utils.string.gradle.GradleUtils;
@@ -31,6 +34,7 @@ public final class Logger {
 
 	@ApiMethod
 	public static void printNewLine() {
+
 		printLine("");
 	}
 
@@ -45,6 +49,7 @@ public final class Logger {
 	@ApiMethod
 	public static void printLine(
 			final String message) {
+
 		printMessage(MessageLevel.INFO, message);
 	}
 
@@ -76,6 +81,7 @@ public final class Logger {
 	@ApiMethod
 	public static void printStatus(
 			final String message) {
+
 		printMessage(MessageLevel.STATUS, message);
 	}
 
@@ -114,46 +120,47 @@ public final class Logger {
 	}
 
 	@ApiMethod
-	public static void printException(
+	public static void printThrowable(
 			final Throwable throwable) {
 
-		final String message = exceptionToString(throwable);
-		printMessage(MessageLevel.EXCEPTION, message);
+		final String message = throwableToString(throwable);
+		printMessage(MessageLevel.THROWABLE, message);
 	}
 
 	@ApiMethod
-	public static String exceptionToString(
+	public static String throwableToString(
 			final Throwable throwable) {
 
-		final StringBuilder sbExceptionString = new StringBuilder();
+		final StringBuilder sbThrowableString = new StringBuilder();
 		if (throwable == null) {
-			sbExceptionString.append("NULL exception");
+			sbThrowableString.append("NULL throwable");
 
 		} else {
-			final Class<? extends Throwable> excClass = throwable.getClass();
-			final String excClassSimpleName = excClass.getSimpleName();
-			sbExceptionString.append("exception of class \"").append(excClassSimpleName)
+			final Class<? extends Throwable> throwableClass = throwable.getClass();
+			final String throwableClassSimpleName = throwableClass.getSimpleName();
+			sbThrowableString.append("throwable of class \"").append(throwableClassSimpleName)
 					.append("\" has occurred").append(System.lineSeparator());
 
-			final String excMessage = throwable.getMessage();
-			sbExceptionString.append(excMessage).append(System.lineSeparator());
+			final String throwableMessage = throwable.getMessage();
+			sbThrowableString.append(throwableMessage).append(System.lineSeparator());
 
 			final StackTraceElement[] stackTraceElementArray = throwable.getStackTrace();
 			for (int i = 0; i < stackTraceElementArray.length; i++) {
 
 				final StackTraceElement stackTraceElement = stackTraceElementArray[i];
-				sbExceptionString.append(stackTraceElement);
+				sbThrowableString.append(stackTraceElement);
 				if (i < stackTraceElementArray.length - 1) {
-					sbExceptionString.append(System.lineSeparator());
+					sbThrowableString.append(System.lineSeparator());
 				}
 			}
 		}
-		return sbExceptionString.toString();
+		return sbThrowableString.toString();
 	}
 
 	@ApiMethod
 	public static void printFinishMessage(
 			final Instant start) {
+
 		printFinishMessage("Done.", start);
 	}
 
@@ -169,18 +176,21 @@ public final class Logger {
 	@ApiMethod
 	public static void printToBeImplemented(
 			final String name) {
+
 		printLine(name + " (to be implemented...)");
 	}
 
 	@ApiMethod
 	public static void printDebugLine(
 			final Object message) {
+
 		printMessage(MessageLevel.INFO, String.valueOf(message));
 	}
 
 	@ApiMethod
 	public static void printDebugError(
 			final Object message) {
+
 		printMessage(MessageLevel.ERROR, String.valueOf(message));
 	}
 
@@ -195,7 +205,10 @@ public final class Logger {
 	private static void printMessage(
 			final MessageLevel info,
 			final String message) {
-		messageConsumer.printMessage(info, message);
+
+		final String processedMessage =
+				Strings.CS.replace(message, SystemUtils.USER_HOME, "%USERPROFILE%");
+		messageConsumer.printMessage(info, processedMessage);
 	}
 
 	@ApiMethod

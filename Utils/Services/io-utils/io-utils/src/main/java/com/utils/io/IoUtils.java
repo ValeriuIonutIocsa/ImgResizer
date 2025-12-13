@@ -16,6 +16,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.utils.annotations.ApiMethod;
+import com.utils.io.file_deleters.FactoryFileDeleter;
 import com.utils.io.processes.InputStreamReaderThread;
 import com.utils.io.processes.ReadBytesHandlerLinesPrint;
 import com.utils.log.Logger;
@@ -39,7 +40,7 @@ public final class IoUtils {
 		try {
 			return StringUtils.isNotBlank(pathString) && Files.exists(Paths.get(pathString));
 
-		} catch (final Exception ignored) {
+		} catch (final Throwable ignored) {
 		}
 		return fileExists;
 	}
@@ -57,7 +58,7 @@ public final class IoUtils {
 		try {
 			regularFileExists = StringUtils.isNotBlank(pathString) && Files.isRegularFile(Paths.get(pathString));
 
-		} catch (final Exception ignored) {
+		} catch (final Throwable ignored) {
 		}
 		return regularFileExists;
 	}
@@ -75,9 +76,52 @@ public final class IoUtils {
 		try {
 			directoryExists = StringUtils.isNotBlank(pathString) && Files.isDirectory(Paths.get(pathString));
 
-		} catch (final Exception ignored) {
+		} catch (final Throwable ignored) {
 		}
 		return directoryExists;
+	}
+
+	@ApiMethod
+	public static boolean checkFileHidden(
+			final String pathString) {
+
+		boolean fileHidden = false;
+		try {
+			if (StringUtils.isNotBlank(pathString)) {
+
+				final Path path = Paths.get(pathString);
+				fileHidden = checkFileHidden(path);
+			}
+
+		} catch (final Throwable ignored) {
+		}
+		return fileHidden;
+	}
+
+	@ApiMethod
+	public static boolean checkFileHidden(
+			final Path path) {
+
+		boolean fileHidden = false;
+		if (Files.exists(path)) {
+			fileHidden = checkFileHiddenNoChecks(path);
+		}
+		return fileHidden;
+	}
+
+	@ApiMethod
+	public static boolean checkFileHiddenNoChecks(
+			final Path path) {
+
+		boolean fileHidden = false;
+		try {
+			if (Files.isHidden(path)) {
+				fileHidden = true;
+			}
+
+		} catch (final Throwable ignored) {
+		}
+		return fileHidden;
 	}
 
 	@ApiMethod
@@ -89,10 +133,10 @@ public final class IoUtils {
 			final Path filePath = Paths.get(filePathString);
 			lastModifiedTime = Files.getLastModifiedTime(filePath).toMillis();
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to compute last modified time of file:" +
 					System.lineSeparator() + filePathString);
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 		return lastModifiedTime;
 	}
@@ -106,10 +150,10 @@ public final class IoUtils {
 			final Path filePath = Paths.get(filePathString);
 			Files.setLastModifiedTime(filePath, FileTime.from(lastModifiedTimeInstant));
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to configure last modified time of file:" +
 					System.lineSeparator() + filePathString);
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 	}
 
@@ -119,14 +163,14 @@ public final class IoUtils {
 
 		byte[] md5HashCode = null;
 		try {
-			final byte[] fileBytes = ReaderUtils.fileToByteArray(filePathString);
+			final byte[] fileBytes = ReaderUtils.tryFileToByteArray(filePathString);
 			final MessageDigest messageDigestMd5 = MessageDigest.getInstance("MD5");
 			md5HashCode = messageDigestMd5.digest(fileBytes);
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to compute MD5 hash code of file:" +
 					System.lineSeparator() + filePathString);
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 		return md5HashCode;
 	}
@@ -142,10 +186,10 @@ public final class IoUtils {
 				lineCount++;
 			}
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to compute line count of file:" +
 					System.lineSeparator() + filePathString);
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 		return lineCount;
 	}
@@ -172,9 +216,9 @@ public final class IoUtils {
 			}
 			resultTmpFilePathString = tmpFile.getPath();
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to create temporary file");
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 		return resultTmpFilePathString;
 	}
@@ -200,9 +244,9 @@ public final class IoUtils {
 			}
 			resultTmpFilePathString = tmpFile.getPath();
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to create temporary file");
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 		return resultTmpFilePathString;
 	}
@@ -214,7 +258,7 @@ public final class IoUtils {
 		boolean success = false;
 		try {
 			final Process process = new ProcessBuilder()
-					.command("cmd", "/c", "start", filePathString)
+					.command("cmd", "/c", "start", "open file with default app", filePathString)
 					.redirectErrorStream(true)
 					.start();
 
@@ -228,11 +272,42 @@ public final class IoUtils {
 
 			success = exitCode == 0;
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to open file with default app:" +
 					System.lineSeparator() + filePathString);
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 		return success;
+	}
+
+	@ApiMethod
+	public static void selectFileInExplorer(
+			final String filePathString,
+			final String appFolderPathString) {
+
+		String tmpBatFilePathString = null;
+		try {
+			final String pathDateTimeString = StrUtils.createPathDateTimeString();
+			tmpBatFilePathString =
+					PathUtils.computePath(appFolderPathString, pathDateTimeString + ".bat");
+
+			WriterUtils.tryStringToFile("start explorer /select,\"" + filePathString + "\"",
+					StandardCharsets.UTF_8, tmpBatFilePathString);
+
+			final Process process = new ProcessBuilder()
+					.command("cmd", "/c", tmpBatFilePathString)
+					.inheritIO()
+					.start();
+			process.waitFor();
+
+		} catch (final Throwable throwable) {
+			Logger.printError("failed to select file in explorer");
+			Logger.printThrowable(throwable);
+
+		} finally {
+			if (IoUtils.fileExists(tmpBatFilePathString)) {
+				FactoryFileDeleter.getInstance().deleteFile(tmpBatFilePathString, false, true);
+			}
+		}
 	}
 }

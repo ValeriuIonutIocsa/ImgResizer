@@ -45,7 +45,7 @@ public class ConcurrencyUtilsShowProgressRegular extends AbstractConcurrencyUtil
 
 		try {
 			future.get();
-		} catch (final Exception ignored) {
+		} catch (final Throwable ignored) {
 		}
 	}
 }

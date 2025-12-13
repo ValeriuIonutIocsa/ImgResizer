@@ -36,7 +36,7 @@ public final class ReaderUtils {
 	}
 
 	@ApiMethod
-	public static byte[] fileToByteArray(
+	public static byte[] tryFileToByteArray(
 			final String filePathString) {
 
 		byte[] byteArray = null;
@@ -44,10 +44,10 @@ public final class ReaderUtils {
 			final Path filePath = Paths.get(filePathString);
 			byteArray = Files.readAllBytes(filePath);
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to read byte array from file:" +
 					System.lineSeparator() + filePathString);
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 		return byteArray;
 	}
@@ -60,10 +60,10 @@ public final class ReaderUtils {
 		try {
 			str = fileToString(filePathString);
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to read contents of file:" +
 					System.lineSeparator() + filePathString);
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 		return str;
 	}
@@ -77,10 +77,10 @@ public final class ReaderUtils {
 		try {
 			str = fileToString(filePathString, charset);
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to read contents of file:" +
 					System.lineSeparator() + filePathString);
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 		return str;
 	}
@@ -130,10 +130,10 @@ public final class ReaderUtils {
 				lineList.add(line);
 			}
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to read contents of file:" +
 					System.lineSeparator() + filePathString);
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 		return lineList;
 	}

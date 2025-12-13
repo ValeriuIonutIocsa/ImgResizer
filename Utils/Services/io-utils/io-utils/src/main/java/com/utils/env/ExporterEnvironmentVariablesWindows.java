@@ -39,8 +39,8 @@ public class ExporterEnvironmentVariablesWindows implements ExporterEnvironmentV
 			process.waitFor();
 			inputStreamReaderThread.join();
 
-		} catch (final Exception exc) {
-			Logger.printException(exc);
+		} catch (final Throwable throwable) {
+			Logger.printThrowable(throwable);
 		}
 	}
 

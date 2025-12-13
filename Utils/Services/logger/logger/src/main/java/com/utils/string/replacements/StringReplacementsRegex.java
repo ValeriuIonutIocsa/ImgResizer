@@ -26,7 +26,7 @@ public class StringReplacementsRegex implements StringReplacements {
 					new StringReplacementsRegexData(searchPattern, replacementString);
 			stringReplacementsRegexDataList.add(stringReplacementsRegexData);
 
-		} catch (final Exception ignored) {
+		} catch (final Throwable ignored) {
 		}
 	}
 

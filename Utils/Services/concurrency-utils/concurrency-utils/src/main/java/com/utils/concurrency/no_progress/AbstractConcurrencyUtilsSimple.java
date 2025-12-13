@@ -49,8 +49,8 @@ public abstract class AbstractConcurrencyUtilsSimple extends AbstractConcurrency
 			try {
 				awaitTerminationSuccess = executorService.awaitTermination(10, TimeUnit.SECONDS);
 
-			} catch (final Exception exc) {
-				Logger.printException(exc);
+			} catch (final Throwable throwable) {
+				Logger.printThrowable(throwable);
 
 			} finally {
 				if (!awaitTerminationSuccess) {

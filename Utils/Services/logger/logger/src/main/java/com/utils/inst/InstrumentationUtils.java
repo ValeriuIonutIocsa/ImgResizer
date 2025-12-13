@@ -26,9 +26,9 @@ public final class InstrumentationUtils {
 				Logger.printWarning(classSimpleName + " used memory: " +
 						SizeUtils.humanReadableByteCountBin(objectSize));
 
-			} catch (final Exception exc) {
+			} catch (final Throwable throwable) {
 				Logger.printWarning("failed to compute " + classSimpleName + " used memory");
-				Logger.printException(exc);
+				Logger.printThrowable(throwable);
 			}
 		}
 	}

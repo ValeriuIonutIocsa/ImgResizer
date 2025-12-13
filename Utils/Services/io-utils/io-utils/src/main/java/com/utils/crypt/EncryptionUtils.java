@@ -31,9 +31,9 @@ public final class EncryptionUtils {
 				encryptedByteArray = cipher.doFinal(byteArray);
 			}
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to encrypt");
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 		return encryptedByteArray;
 	}
@@ -48,9 +48,9 @@ public final class EncryptionUtils {
 				decryptedByteArray = cipher.doFinal(encryptedByteArray);
 			}
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to decrypt");
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 		return decryptedByteArray;
 	}
@@ -79,9 +79,9 @@ public final class EncryptionUtils {
 			cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
 			cipher.init(encryptMode, secretKey, ivParameterSpec);
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to create cipher");
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 		return cipher;
 	}

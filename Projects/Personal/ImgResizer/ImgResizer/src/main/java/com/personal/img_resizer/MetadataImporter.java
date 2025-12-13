@@ -37,10 +37,10 @@ class MetadataImporter {
 			final int exitCode = process.waitFor();
 			success = exitCode == 0;
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to import metadata from file:" +
 					System.lineSeparator() + metadataXmlPathString);
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 	}
 

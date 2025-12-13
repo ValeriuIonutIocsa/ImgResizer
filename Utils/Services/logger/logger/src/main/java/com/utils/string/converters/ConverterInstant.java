@@ -1,7 +1,9 @@
 package com.utils.string.converters;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
@@ -10,8 +12,8 @@ import com.utils.string.StrUtils;
 
 public final class ConverterInstant {
 
-	private final static String SIMPLE_DATE_FORMAT = "yyyy-MMM-dd HH:mm:ss";
-	public final static String FULL_DATE_FORMAT = "yyyy-MMM-dd HH:mm:ss.SSS z";
+	final static String SIMPLE_INSTANT_FORMAT = "yyyy-MMM-dd HH:mm:ss";
+	public final static String FULL_INSTANT_FORMAT = "yyyy-MMM-dd HH:mm:ss.SSS z";
 
 	private ConverterInstant() {
 	}
@@ -34,9 +36,9 @@ public final class ConverterInstant {
 			instant = tryParseInstantFromEpochMs(instantEpochMs);
 
 		} else {
-			instant = tryParseInstant(instantString, FULL_DATE_FORMAT);
+			instant = stringToInstantWithFormat(instantString, FULL_INSTANT_FORMAT);
 			if (instant == null) {
-				instant = tryParseInstant(instantString, SIMPLE_DATE_FORMAT);
+				instant = stringToInstantWithFormat(instantString, SIMPLE_INSTANT_FORMAT);
 			}
 		}
 		return instant;
@@ -49,23 +51,42 @@ public final class ConverterInstant {
 		try {
 			instant = Instant.ofEpochMilli(instantEpochMs);
 
-		} catch (final Exception ignored) {
+		} catch (final Throwable ignored) {
 		}
 		return instant;
 	}
 
-	private static Instant tryParseInstant(
+	@ApiMethod
+	public static Instant stringToInstantWithFormat(
 			final String instantString,
 			final String dateFormat) {
 
 		Instant instant = null;
 		try {
-			final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFormat)
-					.withLocale(Locale.US).withZone(ZoneId.systemDefault());
-			instant = Instant.from(dateTimeFormatter.parse(instantString));
+			final DateTimeFormatter dateTimeFormatter =
+					DateTimeFormatter.ofPattern(dateFormat).withLocale(Locale.US);
+			final LocalDateTime localDateTime = LocalDateTime.parse(instantString, dateTimeFormatter);
+			final ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
+			instant = zonedDateTime.toInstant();
 
-		} catch (final Exception ignored) {
+		} catch (final Throwable ignored) {
 		}
 		return instant;
+	}
+
+	@ApiMethod
+	public static String instantToStringWithFormat(
+			final Instant instant,
+			final String dateFormat) {
+
+		String instantString = null;
+		try {
+			final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFormat)
+					.withLocale(Locale.US).withZone(ZoneId.systemDefault());
+			instantString = dateTimeFormatter.format(instant);
+
+		} catch (final Throwable ignored) {
+		}
+		return instantString;
 	}
 }

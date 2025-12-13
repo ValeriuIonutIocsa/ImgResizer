@@ -52,9 +52,9 @@ public final class FactoryProxySettings {
 				}
 			}
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to load proxy settings");
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 		return proxySettings;
 	}

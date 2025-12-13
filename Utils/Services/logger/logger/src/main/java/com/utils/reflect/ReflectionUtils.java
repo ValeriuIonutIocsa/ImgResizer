@@ -30,7 +30,7 @@ public final class ReflectionUtils {
 				Field fieldInstance = null;
 				try {
 					fieldInstance = singletonClass.getField("INSTANCE");
-				} catch (final Exception ignored) {
+				} catch (final Throwable ignored) {
 				}
 				if (fieldInstance != null) {
 
@@ -39,10 +39,10 @@ public final class ReflectionUtils {
 					singletonList.add(singleton);
 				}
 
-			} catch (final Exception exc) {
+			} catch (final Throwable throwable) {
 				Logger.printError("failed to get instance of " +
 						singletonSubTypeClass.getSimpleName());
-				Logger.printException(exc);
+				Logger.printThrowable(throwable);
 			}
 		}
 	}

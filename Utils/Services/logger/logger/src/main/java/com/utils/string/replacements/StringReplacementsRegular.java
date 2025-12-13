@@ -3,7 +3,7 @@ package com.utils.string.replacements;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import com.utils.string.StrUtils;
 
@@ -35,7 +35,7 @@ public class StringReplacementsRegular implements StringReplacements {
 
 			final String searchString = stringReplacementsRegularData.searchString();
 			final String replacementString = stringReplacementsRegularData.replacementString();
-			resultStr = StringUtils.replace(resultStr, searchString, replacementString);
+			resultStr = Strings.CS.replace(resultStr, searchString, replacementString);
 		}
 		return resultStr;
 	}

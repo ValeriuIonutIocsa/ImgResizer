@@ -102,10 +102,10 @@ public class ZipFileExtractor {
 									Files.setLastModifiedTime(dstFilePath, FileTime.from(Instant.now()));
 								}
 
-							} catch (final Exception exc) {
+							} catch (final Throwable throwable) {
 								Logger.printError("failed to extract file:" +
 										System.lineSeparator() + filePathString);
-								Logger.printException(exc);
+								Logger.printThrowable(throwable);
 							}
 						});
 
@@ -119,10 +119,10 @@ public class ZipFileExtractor {
 				Logger.printStatus("Finished extracting ZIP archive.");
 				success = true;
 
-			} catch (final Exception exc) {
+			} catch (final Throwable throwable) {
 				Logger.printError("failed to extract ZIP archive:" +
 						System.lineSeparator() + zipArchiveFilePathString);
-				Logger.printException(exc);
+				Logger.printThrowable(throwable);
 			}
 		}
 	}

@@ -49,7 +49,7 @@ final class CreateExecutables {
 		};
 		logger.addHandler(handlerMessages);
 
-		final Handler handlerExceptions = new StreamHandler(System.err, new SimpleFormatter() {
+		final Handler handlerErrors = new StreamHandler(System.err, new SimpleFormatter() {
 
 			@Override
 			public synchronized String format(
@@ -63,7 +63,8 @@ final class CreateExecutables {
 						try {
 							throwable.printStackTrace();
 							throwable.printStackTrace(printStream);
-						} catch (final Exception ignored) {
+
+						} catch (final Throwable ignored) {
 						}
 					}
 					return byteArrayOutputStream.toString();
@@ -79,7 +80,7 @@ final class CreateExecutables {
 				flush();
 			}
 		};
-		logger.addHandler(handlerExceptions);
+		logger.addHandler(handlerErrors);
 
 		return logger;
 	}
@@ -109,8 +110,8 @@ final class CreateExecutables {
 				final int ch = System.in.read();
 				LOGGER.info(String.valueOf((char) ch));
 
-			} catch (final Exception exc) {
-				LOGGER.log(Level.SEVERE, null, exc);
+			} catch (final Throwable throwable) {
+				LOGGER.log(Level.SEVERE, null, throwable);
 			}
 		}
 	}
@@ -124,8 +125,8 @@ final class CreateExecutables {
 					.start();
 			process.waitFor();
 
-		} catch (final Exception exc) {
-			LOGGER.log(Level.SEVERE, null, exc);
+		} catch (final Throwable throwable) {
+			LOGGER.log(Level.SEVERE, null, throwable);
 		}
 	}
 

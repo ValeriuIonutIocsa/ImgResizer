@@ -16,12 +16,12 @@ class ZipFileExtractor7zTest {
 		final String dstFolderPathString;
 		final int input = StrUtils.tryParsePositiveInt("11");
 		if (input == 1) {
-			zipArchiveFilePathString = "D:\\IVI_MISC\\Misc\\mnf\\test\\ChosenPictures.zip";
-			dstFolderPathString = "D:\\IVI_MISC\\Misc\\mnf\\test";
+			zipArchiveFilePathString = "D:\\IVI\\Misc\\mnf\\test\\ChosenPictures.zip";
+			dstFolderPathString = "D:\\IVI\\Misc\\mnf\\test";
 
 		} else if (input == 11) {
-			zipArchiveFilePathString = "D:\\IVI_MISC\\Misc\\mnf\\test\\pic1.jpg.zip";
-			dstFolderPathString = "D:\\IVI_MISC\\Misc\\mnf\\test";
+			zipArchiveFilePathString = "D:\\IVI\\Misc\\mnf\\test\\pic1.jpg.zip";
+			dstFolderPathString = "D:\\IVI\\Misc\\mnf\\test";
 
 		} else if (input == 21) {
 			zipArchiveFilePathString = "C:\\IVI\\Poli.zip";

@@ -40,15 +40,18 @@ public abstract class AbstractCsvWriter implements CsvWriter {
 		try (PrintStream printStream = StreamUtils.openPrintStream(
 				outputPathString, false, StandardCharsets.UTF_8)) {
 
-			printStream.println("\"sep=,\"");
+			printStream.print("\"sep=,\"");
+			printStream.println();
+
 			write(printStream);
 
 			success = true;
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			if (StringUtils.isNotBlank(name)) {
+
 				Logger.printError("failed to write " + name);
-				Logger.printException(exc);
+				Logger.printThrowable(throwable);
 			}
 		}
 		return success;

@@ -35,7 +35,7 @@ public final class HostNameUtils {
 
 			hostName = readBytesHandlerByteArray.getString(Charset.defaultCharset());
 
-		} catch (final Exception ignored) {
+		} catch (final Throwable ignored) {
 		}
 		return hostName;
 	}

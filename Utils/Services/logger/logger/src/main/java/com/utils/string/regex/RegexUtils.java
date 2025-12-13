@@ -45,7 +45,7 @@ public final class RegexUtils {
 				}
 			}
 
-		} catch (final Exception ignored) {
+		} catch (final Throwable ignored) {
 			if (StringUtils.isNotBlank(patternString)) {
 				Logger.printWarning("failed to compile REGEX pattern \"" + patternString + "\"");
 			}

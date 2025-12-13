@@ -30,9 +30,9 @@ public final class RmiSslUtils {
 
 			configureSettingsCommon(password, keyStorePathString, trustStorePathString);
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to configure RMI SSL settings");
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 	}
 
@@ -56,7 +56,7 @@ public final class RmiSslUtils {
 					ResourceFileUtils.resourceFileToInputStream(certificateResourceFilePath);
 					OutputStream outputStream = StreamUtils.openOutputStream(certificatePathString)) {
 				IOUtils.copy(inputStream, outputStream);
-			} catch (final Exception ignored) {
+			} catch (final Throwable ignored) {
 			}
 		}
 		return certificatePathString;
@@ -77,9 +77,9 @@ public final class RmiSslUtils {
 
 			configureSettingsCommon(password, keyStorePathString, trustStorePathString);
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to configure RMI SSL settings");
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 	}
 
@@ -98,7 +98,7 @@ public final class RmiSslUtils {
 		} else {
 			try {
 				WriterUtils.byteArrayToFile(certificateByteArray, certificatePathString);
-			} catch (final Exception ignored) {
+			} catch (final Throwable ignored) {
 			}
 		}
 		return certificatePathString;

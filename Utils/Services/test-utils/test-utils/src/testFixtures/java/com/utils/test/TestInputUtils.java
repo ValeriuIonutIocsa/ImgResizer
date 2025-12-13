@@ -18,7 +18,7 @@ public final class TestInputUtils {
 		try {
 			value = Integer.parseInt(intString);
 
-		} catch (final Exception ignored) {
+		} catch (final Throwable ignored) {
 		}
 		return value;
 	}

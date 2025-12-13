@@ -124,9 +124,9 @@ public class ZipFileCreator {
 										Files.setLastModifiedTime(zipFilePath, FileTime.from(Instant.now()));
 									}
 
-								} catch (final Exception exc) {
+								} catch (final Throwable throwable) {
 									Logger.printError("failed to zip file:" + System.lineSeparator() + filePath);
-									Logger.printException(exc);
+									Logger.printThrowable(throwable);
 								}
 							});
 
@@ -153,20 +153,20 @@ public class ZipFileCreator {
 							Files.setLastModifiedTime(zipFilePath, FileTime.from(Instant.now()));
 						}
 
-					} catch (final Exception exc) {
+					} catch (final Throwable throwable) {
 						Logger.printError("failed to zip file:" +
 								System.lineSeparator() + srcFilePathString);
-						Logger.printException(exc);
+						Logger.printThrowable(throwable);
 					}
 				}
 
 				Logger.printStatus("Finished creating ZIP archive.");
 				success = true;
 
-			} catch (final Exception exc) {
+			} catch (final Throwable throwable) {
 				Logger.printError("failed to create ZIP archive:" +
 						System.lineSeparator() + zipArchiveFilePathString);
-				Logger.printException(exc);
+				Logger.printThrowable(throwable);
 			}
 		}
 	}

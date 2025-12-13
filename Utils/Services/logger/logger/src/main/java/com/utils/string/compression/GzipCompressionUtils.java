@@ -7,9 +7,9 @@ import java.util.zip.GZIPOutputStream;
 
 import com.utils.annotations.ApiMethod;
 
-public final class GzipCompressionUtils {
+public final class GZipCompressionUtils {
 
-	private GzipCompressionUtils() {
+	private GZipCompressionUtils() {
 	}
 
 	@ApiMethod
@@ -26,7 +26,7 @@ public final class GzipCompressionUtils {
 				gzipOutputStream.close();
 				compressedData = byteArrayOutputStream.toByteArray();
 
-			} catch (final Exception ignored) {
+			} catch (final Throwable ignored) {
 			}
 		}
 		return compressedData;
@@ -49,7 +49,7 @@ public final class GzipCompressionUtils {
 				}
 				decompressedData = byteArrayOutputStream.toByteArray();
 
-			} catch (final Exception ignored) {
+			} catch (final Throwable ignored) {
 			}
 		}
 		return decompressedData;

@@ -16,9 +16,9 @@ class AppStartImgResizerTest {
 		final int input = TestInputUtils.parseTestInputNumber("1");
 		if (input == 1) {
 
-			final String originalInputFolderPathString = "D:\\IVI_MISC\\Tmp\\ImageResizer\\all\\_orig";
-			final String inputFolderPathString = "D:\\IVI_MISC\\Tmp\\ImageResizer\\all\\input";
-			final String outputFolderPathString = "D:\\IVI_MISC\\Tmp\\ImageResizer\\all\\output";
+			final String originalInputFolderPathString = "D:\\IVI\\Tmp\\ImageResizer\\all\\_orig";
+			final String inputFolderPathString = "D:\\IVI\\Tmp\\ImageResizer\\all\\input";
+			final String outputFolderPathString = "D:\\IVI\\Tmp\\ImageResizer\\all\\output";
 
 			final boolean deleteFolderSuccess = FactoryFolderDeleter.getInstance()
 					.deleteFolder(inputFolderPathString, true, true);
@@ -36,9 +36,9 @@ class AppStartImgResizerTest {
 
 		} else if (input == 2) {
 
-			final String originalInputFolderPathString = "D:\\IVI_MISC\\Tmp\\ImageResizer\\small\\_orig";
-			final String inputFolderPathString = "D:\\IVI_MISC\\Tmp\\ImageResizer\\small\\input";
-			final String outputFolderPathString = "D:\\IVI_MISC\\Tmp\\ImageResizer\\small\\output";
+			final String originalInputFolderPathString = "D:\\IVI\\Tmp\\ImageResizer\\small\\_orig";
+			final String inputFolderPathString = "D:\\IVI\\Tmp\\ImageResizer\\small\\input";
+			final String outputFolderPathString = "D:\\IVI\\Tmp\\ImageResizer\\small\\output";
 
 			final boolean deleteFolderSuccess = FactoryFolderDeleter.getInstance()
 					.deleteFolder(inputFolderPathString, true, true);

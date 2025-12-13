@@ -11,7 +11,7 @@ import com.utils.string.StrUtils;
 public class Messages implements Serializable {
 
 	@Serial
-    private static final long serialVersionUID = -7658013346641279882L;
+	private static final long serialVersionUID = -7658013346641279882L;
 
 	private final List<Message> messageList;
 	private final int[] messageCountArray;

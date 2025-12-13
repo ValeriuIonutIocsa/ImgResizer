@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import com.utils.annotations.ApiMethod;
 
@@ -47,7 +47,7 @@ public final class ZipUtils {
 		if (zipFilePathUriString.startsWith("file:///")) {
 			archiveUriString = "jar:" + zipFilePathUriString;
 		} else {
-			archiveUriString = "jar:" + StringUtils.replaceOnce(zipFilePathUriString, "file://", "file://///");
+			archiveUriString = "jar:" + Strings.CS.replaceOnce(zipFilePathUriString, "file://", "file://///");
 		}
 		final URI archiveUri = URI.create(archiveUriString);
 		return FileSystems.newFileSystem(archiveUri, env);

@@ -23,9 +23,9 @@ class EncryptionUtilsTest {
 	void testEncryptFile() throws Exception {
 
 		final String inputFilePathString =
-				"D:\\IVI_MISC\\Tmp\\io-utils\\crypt\\test.txt";
+				"D:\\IVI\\Tmp\\io-utils\\crypt\\test.txt";
 		final String outputFilePathString =
-				"D:\\IVI_MISC\\Tmp\\io-utils\\crypt\\test.encrypted";
+				"D:\\IVI\\Tmp\\io-utils\\crypt\\test.encrypted";
 
 		final Cipher encryptCipher = EncryptionUtils.createEncryptCipher();
 		try (InputStream inputStream = StreamUtils.openBufferedInputStream(inputFilePathString);
@@ -40,9 +40,9 @@ class EncryptionUtilsTest {
 	void testDecryptFile() throws Exception {
 
 		final String inputFilePathString =
-				"D:\\IVI_MISC\\Tmp\\io-utils\\crypt\\test.encrypted";
+				"D:\\IVI\\Tmp\\io-utils\\crypt\\test.encrypted";
 		final String outputFilePathString =
-				"D:\\IVI_MISC\\Tmp\\io-utils\\crypt\\test.txt";
+				"D:\\IVI\\Tmp\\io-utils\\crypt\\test.txt";
 
 		final Cipher decryptCipher = EncryptionUtils.createDecryptCipher();
 		try (InputStream inputStream = new CipherInputStream(
@@ -59,7 +59,7 @@ class EncryptionUtilsTest {
 		final String originalString = "how to do in java.com";
 
 		final String encryptedFilePathString =
-				"D:\\IVI_MISC\\Tmp\\io-utils\\crypt\\test.encrypted";
+				"D:\\IVI\\Tmp\\io-utils\\crypt\\test.encrypted";
 		Logger.printProgress("generating encrypted file:");
 		Logger.printLine(encryptedFilePathString);
 
@@ -89,7 +89,7 @@ class EncryptionUtilsTest {
 		properties.put(key, value);
 
 		final String encryptedFilePathString =
-				"D:\\IVI_MISC\\Tmp\\io-utils\\crypt\\test_properties.encrypted";
+				"D:\\IVI\\Tmp\\io-utils\\crypt\\test_properties.encrypted";
 		Logger.printProgress("generating encrypted file:");
 		Logger.printLine(encryptedFilePathString);
 

@@ -21,6 +21,7 @@ public final class ThreadUtils {
 			if (millis > 0) {
 				Thread.sleep(millis);
 			}
+
 		} catch (final InterruptedException exc) {
 			interrupted = true;
 		}

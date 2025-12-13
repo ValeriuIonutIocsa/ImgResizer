@@ -35,10 +35,10 @@ public final class ResourceFileUtils {
 				}
 			}
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to get resource file line list for:" +
 					System.lineSeparator() + resourceFilePathString);
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 		return lineList;
 	}
@@ -52,10 +52,10 @@ public final class ResourceFileUtils {
 			final InputStream inputStream = resourceFileToInputStream(resourceFilePathString);
 			str = ReaderUtils.inputStreamToString(inputStream);
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to get resource file content for:" +
 					System.lineSeparator() + resourceFilePathString);
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 		return str;
 	}
@@ -69,10 +69,10 @@ public final class ResourceFileUtils {
 			final InputStream inputStream = resourceFileToInputStream(resourceFilePathString);
 			bytes = IOUtils.toByteArray(inputStream);
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to get resource file content for:" +
 					System.lineSeparator() + resourceFilePathString);
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 		return bytes;
 	}

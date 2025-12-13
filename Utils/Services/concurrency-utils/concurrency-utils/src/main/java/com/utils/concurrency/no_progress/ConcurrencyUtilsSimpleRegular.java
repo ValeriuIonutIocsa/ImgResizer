@@ -39,7 +39,7 @@ public class ConcurrencyUtilsSimpleRegular extends AbstractConcurrencyUtilsSimpl
 
 		try {
 			future.get();
-		} catch (final Exception ignored) {
+		} catch (final Throwable ignored) {
 		}
 	}
 }

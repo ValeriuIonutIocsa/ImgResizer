@@ -8,7 +8,7 @@ public abstract class AbstractMessageConsumer implements MessageConsumer {
 			final String messageParam) {
 
 		final boolean debugMode = Logger.isDebugMode();
-		if (debugMode || messageLevel != MessageLevel.EXCEPTION) {
+		if (debugMode || messageLevel != MessageLevel.THROWABLE) {
 
 			String message = messageParam;
 			if (message == null) {

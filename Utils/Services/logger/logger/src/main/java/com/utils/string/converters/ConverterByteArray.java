@@ -19,7 +19,7 @@ public final class ConverterByteArray {
 	}
 
 	@ApiMethod
-	public static byte[] parseByteArray(
+	public static byte[] stringToByteArray(
 			final String str) {
 
 		final byte[] encodedBytes = str.getBytes(StandardCharsets.UTF_8);

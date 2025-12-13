@@ -3,6 +3,7 @@ package com.utils.io;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 
+import com.utils.annotations.ApiMethod;
 import com.utils.log.Logger;
 
 public final class SplitFileUtils {
@@ -10,6 +11,7 @@ public final class SplitFileUtils {
 	private SplitFileUtils() {
 	}
 
+	@ApiMethod
 	public static void splitFile(
 			final String filePathString,
 			final long sizeOfChunk) {
@@ -47,10 +49,10 @@ public final class SplitFileUtils {
 				}
 			}
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to split into chucks the file:" +
 					System.lineSeparator() + filePathString);
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 	}
 }

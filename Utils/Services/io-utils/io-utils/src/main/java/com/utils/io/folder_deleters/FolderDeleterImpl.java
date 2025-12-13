@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.function.Predicate;
 
 import com.utils.annotations.ApiMethod;
 import com.utils.io.IoUtils;
@@ -76,12 +77,12 @@ class FolderDeleterImpl implements FolderDeleter {
 			});
 			success = true;
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			if (verboseError) {
 				Logger.printError("failed to delete folder:" +
 						System.lineSeparator() + folderPathString);
 			}
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 		return success;
 	}
@@ -144,8 +145,8 @@ class FolderDeleterImpl implements FolderDeleter {
 			});
 			success = true;
 
-		} catch (final Exception exc) {
-			Logger.printException(exc);
+		} catch (final Throwable throwable) {
+			Logger.printThrowable(throwable);
 		}
 
 		if (!success) {
@@ -155,6 +156,76 @@ class FolderDeleterImpl implements FolderDeleter {
 			}
 		}
 
+		return success;
+	}
+
+	@Override
+	@ApiMethod
+	public boolean cleanFolderWithFilter(
+			final String folderPathString,
+			final boolean verboseProgress,
+			final boolean verboseError,
+			final Predicate<Path> directoryPathPredicate,
+			final Predicate<Path> filePathPredicate) {
+
+		boolean success;
+		if (IoUtils.directoryExists(folderPathString)) {
+
+			success = false;
+			try {
+				if (verboseProgress) {
+
+					Logger.printProgress("cleaning folder:");
+					Logger.printLine(folderPathString);
+				}
+
+				final Path folderPath = Paths.get(folderPathString);
+				Files.walkFileTree(folderPath, new SimpleFileVisitor<>() {
+
+					@Override
+					public FileVisitResult visitFile(
+							final Path filePath,
+							final BasicFileAttributes attrs) throws IOException {
+
+						if (filePathPredicate.test(filePath)) {
+
+							FactoryReadOnlyFlagClearer.getInstance()
+									.clearReadOnlyFlagFileNoChecks(filePath.toString(), false, true);
+							Files.delete(filePath);
+						}
+						return FileVisitResult.CONTINUE;
+					}
+
+					@Override
+					public FileVisitResult postVisitDirectory(
+							final Path directoryPath,
+							final IOException exc) throws IOException {
+
+						if (!folderPath.equals(directoryPath)) {
+
+							if (directoryPathPredicate.test(directoryPath)) {
+								Files.delete(directoryPath);
+							}
+						}
+						return FileVisitResult.CONTINUE;
+					}
+				});
+				success = true;
+
+			} catch (final Throwable throwable) {
+				Logger.printThrowable(throwable);
+			}
+
+			if (!success) {
+				if (verboseError) {
+					Logger.printError("failed to clean folder:" +
+							System.lineSeparator() + folderPathString);
+				}
+			}
+
+		} else {
+			success = true;
+		}
 		return success;
 	}
 

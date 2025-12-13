@@ -121,7 +121,7 @@ public final class PathUtils {
 				pathString = pathString.substring(0, lastCharIndex);
 			}
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 
 			if (verbose) {
 
@@ -135,7 +135,7 @@ public final class PathUtils {
 					sbErrorMessage.append(System.lineSeparator()).append(otherPathString);
 				}
 				Logger.printError(sbErrorMessage);
-				Logger.printException(exc);
+				Logger.printThrowable(throwable);
 			}
 		}
 		return pathString;
@@ -238,10 +238,10 @@ public final class PathUtils {
 				}
 			}
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to compute parent path, levels to go up: " + levelsToGoUp +
 					", from:" + System.lineSeparator() + pathString);
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 		return folderPathString;
 	}
@@ -330,11 +330,11 @@ public final class PathUtils {
 			final Path relativePath = fromPath.relativize(toPath);
 			relativePathString = relativePath.toString();
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to compute relative path string from:" +
 					System.lineSeparator() + fromPathString + System.lineSeparator() +
 					"to:" + System.lineSeparator() + toPathString);
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 		return relativePathString;
 	}
@@ -351,7 +351,7 @@ public final class PathUtils {
 			final Path relativePath = fromPath.relativize(toPath);
 			relativePathString = relativePath.toString();
 
-		} catch (final Exception ignored) {
+		} catch (final Throwable ignored) {
 		}
 		return relativePathString;
 	}
@@ -368,10 +368,10 @@ public final class PathUtils {
 				absolutePath = path.isAbsolute();
 			}
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to check absolute path for:" +
 					System.lineSeparator() + pathString);
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 		return absolutePath;
 	}

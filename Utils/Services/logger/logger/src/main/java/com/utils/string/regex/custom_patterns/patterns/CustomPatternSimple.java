@@ -1,6 +1,6 @@
 package com.utils.string.regex.custom_patterns.patterns;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 public class CustomPatternSimple extends AbstractCustomPattern {
 
@@ -18,9 +18,9 @@ public class CustomPatternSimple extends AbstractCustomPattern {
 
 		final boolean result;
 		if (caseSensitive) {
-			result = StringUtils.contains(string, pattern);
+			result = Strings.CS.contains(string, pattern);
 		} else {
-			result = StringUtils.containsIgnoreCase(string, pattern);
+			result = Strings.CI.contains(string, pattern);
 		}
 		return result;
 	}

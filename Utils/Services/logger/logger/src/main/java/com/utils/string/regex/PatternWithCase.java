@@ -1,32 +1,35 @@
 package com.utils.string.regex;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.regex.Pattern;
 
 import org.w3c.dom.Element;
 
 import com.utils.string.StrUtils;
 
-public class PatternWithCase {
+public class PatternWithCase implements Serializable {
+
+	@Serial
+	private static final long serialVersionUID = -7028678646055852912L;
 
 	private final String patternString;
 	private final boolean caseSensitive;
 
-	private transient final Pattern pattern;
+	private transient Pattern pattern;
 
 	PatternWithCase(
 			final String patternString,
-			final boolean caseSensitive,
-			final Pattern pattern) {
+			final boolean caseSensitive) {
 
 		this.patternString = patternString;
 		this.caseSensitive = caseSensitive;
-
-		this.pattern = pattern;
 	}
 
 	public boolean checkMatches(
 			final String string) {
 
+		final Pattern pattern = createPattern();
 		return string != null && pattern.matcher(string).matches();
 	}
 
@@ -36,6 +39,18 @@ public class PatternWithCase {
 
 		element.setAttribute(attributeName, patternString);
 		element.setAttribute(attributeName + "CaseSensitive", String.valueOf(caseSensitive));
+	}
+
+	public Pattern createPattern() {
+
+		if (pattern == null) {
+
+			pattern = RegexUtils.tryCompile(patternString, caseSensitive);
+			if (pattern == null) {
+				pattern = Pattern.compile("");
+			}
+		}
+		return pattern;
 	}
 
 	@Override
@@ -49,9 +64,5 @@ public class PatternWithCase {
 
 	public boolean isCaseSensitive() {
 		return caseSensitive;
-	}
-
-	public Pattern getPattern() {
-		return pattern;
 	}
 }

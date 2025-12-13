@@ -49,9 +49,9 @@ public class ParserLocalIpAddresses {
 				}
 			}
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printLine("failed to parse PC IP addresses");
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 	}
 

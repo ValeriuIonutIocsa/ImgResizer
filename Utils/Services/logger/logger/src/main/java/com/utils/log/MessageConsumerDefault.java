@@ -14,7 +14,7 @@ public class MessageConsumerDefault extends AbstractMessageConsumer {
 
 		} else if (messageLevel == MessageLevel.WARNING ||
 				messageLevel == MessageLevel.ERROR ||
-				messageLevel == MessageLevel.EXCEPTION) {
+				messageLevel == MessageLevel.THROWABLE) {
 			System.err.println(message);
 		}
 	}

@@ -55,7 +55,7 @@ public class ConcurrencyUtilsSimpleTimed extends AbstractConcurrencyUtilsSimple 
 
 		try {
 			future.get();
-		} catch (final Exception ignored) {
+		} catch (final Throwable ignored) {
 		}
 	}
 }

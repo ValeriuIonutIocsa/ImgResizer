@@ -22,10 +22,10 @@ public final class FileSizeUtils {
 			final Path filePath = Paths.get(filePathString);
 			fileSize = Files.size(filePath);
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to compute size of file:" +
 					System.lineSeparator() + filePathString);
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 		return fileSize;
 	}
@@ -40,10 +40,10 @@ public final class FileSizeUtils {
 			final long fileSize = Files.size(filePath);
 			fileSizeString = SizeUtils.humanReadableByteCountBin(fileSize);
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to compute readable size of file:" +
 					System.lineSeparator() + filePathString);
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 		return fileSizeString;
 	}
