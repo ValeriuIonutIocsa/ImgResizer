@@ -110,7 +110,7 @@ final class ImgResizer {
 		try {
 			Logger.printProgress("converting image to JPG");
 
-			ProcessStarter.setGlobalSearchPath("D:\\IVI\\Apps\\ImageMagick");
+			ProcessStarter.setGlobalSearchPath("D:\\IVI_PERS\\Apps\\ImageMagick");
 			final ConvertCmd convertCmd = new ConvertCmd();
 
 			final IMOperation imOperation = new IMOperation();
