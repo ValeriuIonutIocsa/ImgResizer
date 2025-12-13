@@ -2,7 +2,7 @@ ext {
     mainClass = 'com.personal.img_resizer.AppStart' + project.name
     projectVersion = '0.0.1'
     convertToExe = false
-    jarFolderPath = 'C:\\IVI\\Apps\\Scripts\\Personal\\ImgResizer'
+    jarFolderPath = 'C:\\IVI_PERS\\Scripts\\ImgResizer'
 
     subProjectNames = [
             ':io-utils'
