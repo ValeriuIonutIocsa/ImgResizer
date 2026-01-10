@@ -79,6 +79,7 @@ final class AppStartImgResizer {
 		Logger.printLine("input path: " + inputPathString);
 		Logger.printLine("output path: " + outputPathString);
 		Logger.printLine("length: " + length);
+		Logger.printLine("verbose: " + verbose);
 
 		if (IoUtils.directoryExists(inputPathString)) {
 
@@ -92,6 +93,8 @@ final class AppStartImgResizer {
 						filePathStringList.add(filePathString);
 					});
 			for (final String filePathString : filePathStringList) {
+
+				Logger.printNewLine();
 
 				final String relativePath = PathUtils.computeRelativePath(inputPathString, filePathString);
 				String outputFilePathString = PathUtils.computePath(outputPathString, relativePath);

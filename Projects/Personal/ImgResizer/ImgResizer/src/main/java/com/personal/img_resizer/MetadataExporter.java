@@ -13,6 +13,7 @@ import com.utils.io.PathUtils;
 import com.utils.io.WriterUtils;
 import com.utils.io.processes.InputStreamReaderThread;
 import com.utils.io.processes.ReadBytesHandlerLinesCollect;
+import com.utils.io.processes.ReadBytesHandlerLinesPrint;
 import com.utils.log.Logger;
 import com.utils.string.StrUtils;
 
@@ -30,6 +31,7 @@ class MetadataExporter {
 
 	private final String filePathString;
 	private final ImageType imageType;
+	private final boolean verbose;
 
 	private int imageWidth;
 	private int imageHeight;
@@ -38,10 +40,12 @@ class MetadataExporter {
 
 	MetadataExporter(
 			final String filePathString,
-			final ImageType imageType) {
+			final ImageType imageType,
+			final boolean verbose) {
 
 		this.filePathString = filePathString;
 		this.imageType = imageType;
+		this.verbose = verbose;
 	}
 
 	void work() {
@@ -50,18 +54,28 @@ class MetadataExporter {
 			Logger.printProgress("exporting metadata of file:");
 			Logger.printLine(filePathString);
 
+			final String[] commandPartArray = { "exiftool", "-X", filePathString };
+			if (verbose) {
+
+				Logger.printProgress("executing command:");
+				Logger.printLine(StringUtils.join(commandPartArray, ' '));
+			}
+
 			final String folderPathString = PathUtils.computeParentPath(filePathString);
 			final Process process = new ProcessBuilder()
-					.command("exiftool", "-X", filePathString)
+					.command(commandPartArray)
 					.directory(new File(folderPathString))
-					.redirectError(ProcessBuilder.Redirect.INHERIT)
 					.start();
 
 			final InputStream inputStream = process.getInputStream();
 			final ReadBytesHandlerLinesCollect readBytesHandlerLinesCollect =
 					new ReadBytesHandlerLinesCollect();
-			new InputStreamReaderThread("export metadata", inputStream, Charset.defaultCharset(),
+			new InputStreamReaderThread("export metadata output", inputStream, Charset.defaultCharset(),
 					readBytesHandlerLinesCollect).start();
+
+			final InputStream errorStream = process.getErrorStream();
+			new InputStreamReaderThread("export metadata error", errorStream, Charset.defaultCharset(),
+					new ReadBytesHandlerLinesPrint()).start();
 
 			final int exitCode = process.waitFor();
 
@@ -106,15 +120,23 @@ class MetadataExporter {
 			Logger.printLine("image height: " + StrUtils.positiveIntToString(imageHeight, true));
 
 			metadataXmlPathString = filePathString + ".xml";
+
+			Logger.printProgress("writing metadata file:");
+			Logger.printLine(metadataXmlPathString);
+
 			final String metadataXmlContent = StringUtils.join(lineList, System.lineSeparator());
 			WriterUtils.stringToFile(metadataXmlContent, Charset.defaultCharset(), metadataXmlPathString);
 
 			success = exitCode == 0;
 
 		} catch (final Throwable throwable) {
-			Logger.printError("failed to export metadata for file:" +
-					System.lineSeparator() + filePathString);
 			Logger.printThrowable(throwable);
+
+		} finally {
+			if (!success) {
+				Logger.printError("failed to export metadata for file:" +
+						System.lineSeparator() + filePathString);
+			}
 		}
 	}
 

@@ -1,6 +1,8 @@
 package com.personal.img_resizer;
 
 import java.io.File;
+import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +15,10 @@ import com.utils.io.PathUtils;
 import com.utils.io.file_copiers.FactoryFileCopier;
 import com.utils.io.file_deleters.FactoryFileDeleter;
 import com.utils.io.folder_creators.FactoryFolderCreator;
+import com.utils.io.processes.InputStreamReaderThread;
+import com.utils.io.processes.ReadBytesHandler;
+import com.utils.io.processes.ReadBytesHandlerLinesCollect;
+import com.utils.io.processes.ReadBytesHandlerLinesPrint;
 import com.utils.log.Logger;
 
 final class ImgResizer {
@@ -30,7 +36,6 @@ final class ImgResizer {
 		boolean success = false;
 		final List<String> tmpFilePathStringList = new ArrayList<>();
 		try {
-			Logger.printNewLine();
 			Logger.printProgress("copying image file:");
 			Logger.printLine(filePathString);
 			Logger.printLine("to:");
@@ -44,20 +49,20 @@ final class ImgResizer {
 						.createParentDirectories(outputFilePathString, false, true);
 				if (success) {
 
-					final String jpgFilePathString;
+					final String tmpJpgFilePathString;
 					if (imageType != ImageType.JPG) {
 
-						jpgFilePathString = PathUtils.computePathWoExt(filePathString) + ".jpg";
-						tmpFilePathStringList.add(jpgFilePathString);
-						success = convertImageToJpg(filePathString, jpgFilePathString);
+						tmpJpgFilePathString = PathUtils.computePathWoExt(filePathString) + "_tmp.jpg";
+						tmpFilePathStringList.add(tmpJpgFilePathString);
+						success = convertImageToJpg(filePathString, tmpJpgFilePathString);
 
 					} else {
-						jpgFilePathString = filePathString;
+						tmpJpgFilePathString = filePathString;
 					}
 					if (success) {
 
 						final MetadataExporter metadataExporter =
-								new MetadataExporter(jpgFilePathString, ImageType.JPG);
+								new MetadataExporter(tmpJpgFilePathString, ImageType.JPG, verbose);
 						metadataExporter.work();
 
 						final String metadataXmlPathString =
@@ -68,7 +73,7 @@ final class ImgResizer {
 						if (success) {
 
 							final ResizeImageOutput resizeImageL2Return = workL2(
-									jpgFilePathString, outputFilePathString, metadataExporter, length, verbose);
+									tmpJpgFilePathString, outputFilePathString, metadataExporter, length, verbose);
 							success = resizeImageL2Return.success();
 							if (success) {
 
@@ -76,7 +81,7 @@ final class ImgResizer {
 								if (needToImportMetadata) {
 
 									final MetadataImporter metadataImporter =
-											new MetadataImporter(outputFilePathString, metadataXmlPathString);
+											new MetadataImporter(outputFilePathString, metadataXmlPathString, verbose);
 									metadataImporter.work();
 
 									success = metadataImporter.isSuccess();
@@ -88,11 +93,13 @@ final class ImgResizer {
 			}
 
 		} catch (final Throwable throwable) {
-			Logger.printError("failed to copy image file:" +
-					System.lineSeparator() + filePathString);
 			Logger.printThrowable(throwable);
 
 		} finally {
+			if (!success) {
+				Logger.printError("failed to copy image file:" +
+						System.lineSeparator() + filePathString);
+			}
 			if (!verbose) {
 				for (final String tmpFilePathString : tmpFilePathStringList) {
 					FactoryFileDeleter.getInstance().deleteFile(tmpFilePathString, true, true);
@@ -168,19 +175,22 @@ final class ImgResizer {
 					Logger.printLine(StringUtils.join(commandPartArray, ' '));
 				}
 
-				final ProcessBuilder.Redirect processBuilderRedirect;
-				if (verbose) {
-					processBuilderRedirect = ProcessBuilder.Redirect.INHERIT;
-				} else {
-					processBuilderRedirect = ProcessBuilder.Redirect.DISCARD;
-				}
-
 				final Process process = new ProcessBuilder()
 						.command(commandPartArray)
 						.directory(new File(outputFilePathString).getParentFile())
-						.redirectOutput(processBuilderRedirect)
-						.redirectError(processBuilderRedirect)
+						.redirectErrorStream(true)
 						.start();
+
+				final ReadBytesHandler readBytesHandler;
+				if (verbose) {
+					readBytesHandler = new ReadBytesHandlerLinesPrint();
+				} else {
+					readBytesHandler = new ReadBytesHandlerLinesCollect();
+				}
+				final InputStream inputStream = process.getInputStream();
+				new InputStreamReaderThread("resize image", inputStream, Charset.defaultCharset(),
+						readBytesHandler).start();
+
 				final int exitCode = process.waitFor();
 				success = exitCode == 0;
 

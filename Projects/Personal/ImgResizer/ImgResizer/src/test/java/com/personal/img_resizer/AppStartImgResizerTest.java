@@ -13,7 +13,7 @@ class AppStartImgResizerTest {
 	void testMain() {
 
 		final String[] args;
-		final int input = TestInputUtils.parseTestInputNumber("1");
+		final int input = TestInputUtils.parseTestInputNumber("11");
 		if (input == 1) {
 
 			final String originalInputFolderPathString = "D:\\IVI_PERS\\Tmp\\ImageResizer\\all\\_orig";
@@ -52,6 +52,27 @@ class AppStartImgResizerTest {
 					"1920",
 					inputFolderPathString,
 					outputFolderPathString
+			};
+
+		} else if (input == 11) {
+
+			final String inputFilePathString = "D:\\IVI_PERS\\Tmp\\ImageResizer\\IMG_3326.HEIC";
+			final String outputFilePathString = "D:\\IVI_PERS\\Tmp\\ImageResizer\\IMG_3326.jpg";
+			args = new String[] {
+					"1920",
+					inputFilePathString,
+					outputFilePathString
+			};
+
+		} else if (input == 12) {
+
+			final String inputFilePathString = "D:\\IVI_PERS\\Tmp\\ImageResizer\\IMG_3326.HEIC";
+			final String outputFilePathString = "D:\\IVI_PERS\\Tmp\\ImageResizer\\IMG_3326.jpg";
+			args = new String[] {
+					"1920",
+					inputFilePathString,
+					outputFilePathString,
+					"-verbose"
 			};
 
 		} else {
