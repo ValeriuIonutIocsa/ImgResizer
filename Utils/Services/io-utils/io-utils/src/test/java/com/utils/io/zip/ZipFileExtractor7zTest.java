@@ -35,7 +35,7 @@ class ZipFileExtractor7zTest {
 
 		ProgressIndicators.setInstance(ProgressIndicatorConsole.INSTANCE);
 
-		final ZipFileExtractor7z zipFileExtractor7z = new ZipFileExtractor7z("7z",
+		final ZipFileExtractor7z zipFileExtractor7z = new ZipFileExtractor7z("7z", -1,
 				zipArchiveFilePathString, dstFolderPathString, deleteExisting);
 		zipFileExtractor7z.work();
 

@@ -19,7 +19,7 @@ class SevenZipFileCreator7zTest {
 		ProgressIndicators.setInstance(ProgressIndicatorConsole.INSTANCE);
 
 		final SevenZipFileCreator7z sevenZipFileCreator7z =
-				new SevenZipFileCreator7z("7z", 1, inputFilePathString, archiveFilePathString, deleteExisting);
+				new SevenZipFileCreator7z("7z", 1, 1, inputFilePathString, archiveFilePathString, deleteExisting);
 		sevenZipFileCreator7z.work();
 
 		final boolean success = sevenZipFileCreator7z.isSuccess();

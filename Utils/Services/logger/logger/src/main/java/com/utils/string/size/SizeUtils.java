@@ -1,5 +1,7 @@
 package com.utils.string.size;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.utils.annotations.ApiMethod;
 import com.utils.string.StrUtils;
 
@@ -9,6 +11,7 @@ public final class SizeUtils {
 	}
 
 	@ApiMethod
+	@NotNull
 	public static String humanReadableByteCountBin(
 			final long size) {
 

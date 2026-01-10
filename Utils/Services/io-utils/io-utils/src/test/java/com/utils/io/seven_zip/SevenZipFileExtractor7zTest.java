@@ -21,7 +21,7 @@ class SevenZipFileExtractor7zTest {
 		final boolean deleteExisting = false;
 
 		final SevenZipFileExtractor7z sevenZipFileExtractor7z =
-				new SevenZipFileExtractor7z("7z", archiveFilePathString,
+				new SevenZipFileExtractor7z("7z", 1, archiveFilePathString,
 						outputParentFolderPathString, deleteExisting);
 		sevenZipFileExtractor7z.work();
 

@@ -1,8 +1,8 @@
 package com.utils.net;
 
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
+
+import org.apache.commons.lang3.SystemUtils;
 
 import com.utils.annotations.ApiMethod;
 import com.utils.io.processes.InputStreamReaderThread;
@@ -18,11 +18,13 @@ public final class HostNameUtils {
 
 		String hostName = "";
 		try {
-			final List<String> commandList = new ArrayList<>();
-			commandList.add("cmd");
-			commandList.add("/c");
-			commandList.add("hostname");
-			final Process process = new ProcessBuilder(commandList).start();
+			final String[] commandPartArray;
+			if (SystemUtils.IS_OS_WINDOWS) {
+				commandPartArray = new String[] { "cmd", "/c", "hostname" };
+			} else {
+				commandPartArray = new String[] { "hostname" };
+			}
+			final Process process = new ProcessBuilder(commandPartArray).start();
 
 			final ReadBytesHandlerByteArray readBytesHandlerByteArray = new ReadBytesHandlerByteArray();
 			final InputStreamReaderThread inputStreamReaderThread = new InputStreamReaderThread(

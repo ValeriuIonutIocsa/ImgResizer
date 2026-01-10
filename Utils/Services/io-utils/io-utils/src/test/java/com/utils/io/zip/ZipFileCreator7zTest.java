@@ -35,8 +35,8 @@ class ZipFileCreator7zTest {
 
 		ProgressIndicators.setInstance(ProgressIndicatorConsole.INSTANCE);
 
-		final ZipFileCreator7z zipFileCreator7z =
-				new ZipFileCreator7z("7z", srcFilePathString, zipArchiveFilePathString, deleteExisting);
+		final ZipFileCreator7z zipFileCreator7z = new ZipFileCreator7z("7z", -1,
+				srcFilePathString, zipArchiveFilePathString, deleteExisting);
 		zipFileCreator7z.work();
 
 		final boolean success = zipFileCreator7z.isSuccess();

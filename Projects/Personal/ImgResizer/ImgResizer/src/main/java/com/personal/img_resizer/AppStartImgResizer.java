@@ -24,7 +24,7 @@ final class AppStartImgResizer {
 		boolean success = true;
 		try {
 			final Instant start = Instant.now();
-			Logger.printProgress("--> starting ImgResizer");
+			Logger.printProgress("starting ImgResizer");
 
 			if (args.length >= 1 && "-help".equals(args[0])) {
 				final String helpMessage = createHelpMessage();

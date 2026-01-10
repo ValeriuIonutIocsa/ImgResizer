@@ -3,7 +3,7 @@ ext {
             ':concurrency-utils'
     ]
     compileClassPaths = [
-            'commons-io:commons-io:2.20.0'
+            'commons-io:commons-io:2.21.0'
     ]
     compileJarFilePaths = []
     testCompileClassPaths = []

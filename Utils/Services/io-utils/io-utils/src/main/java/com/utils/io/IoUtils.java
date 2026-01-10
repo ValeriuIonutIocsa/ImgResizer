@@ -14,6 +14,7 @@ import java.time.Instant;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
 
 import com.utils.annotations.ApiMethod;
 import com.utils.io.file_deleters.FactoryFileDeleter;
@@ -257,8 +258,16 @@ public final class IoUtils {
 
 		boolean success = false;
 		try {
+			final String[] commandPartArray;
+			if (SystemUtils.IS_OS_WINDOWS) {
+				commandPartArray = new String[] {
+						"cmd", "/c", "start", "open file with default app", filePathString };
+			} else {
+				commandPartArray = new String[] {
+						"sh", "-c", "nohup xdg-open '" + filePathString + "' >/dev/null 2>&1 &" };
+			}
 			final Process process = new ProcessBuilder()
-					.command("cmd", "/c", "start", "open file with default app", filePathString)
+					.command(commandPartArray)
 					.redirectErrorStream(true)
 					.start();
 
@@ -282,6 +291,17 @@ public final class IoUtils {
 
 	@ApiMethod
 	public static void selectFileInExplorer(
+			final String filePathString,
+			final String appFolderPathString) {
+
+		if (SystemUtils.IS_OS_WINDOWS) {
+			selectFileInExplorerWin(filePathString, appFolderPathString);
+		} else {
+			selectFileInExplorerLinux(filePathString);
+		}
+	}
+
+	private static void selectFileInExplorerWin(
 			final String filePathString,
 			final String appFolderPathString) {
 
@@ -309,5 +329,63 @@ public final class IoUtils {
 				FactoryFileDeleter.getInstance().deleteFile(tmpBatFilePathString, false, true);
 			}
 		}
+	}
+
+	private static void selectFileInExplorerLinux(
+			final String filePathString) {
+
+		try {
+			final String linuxFileManager = detectLinuxFileManager();
+			switch (linuxFileManager) {
+
+				case "nautilus" -> new ProcessBuilder()
+						.command("sh", "-c", "nautilus --select '", filePathString + "' >/dev/null 2>&1 &")
+						.inheritIO()
+						.start()
+						.waitFor();
+
+				case "dolphin" -> new ProcessBuilder()
+						.command("sh", "-c", "dolphin --select '", filePathString + "' >/dev/null 2>&1 &")
+						.inheritIO()
+						.start()
+						.waitFor();
+
+				case "thunar" -> new ProcessBuilder()
+						.command("sh", "-c", "thunar --select '", filePathString + "' >/dev/null 2>&1 &")
+						.inheritIO()
+						.start()
+						.waitFor();
+
+				default -> Logger.printError(
+						"cannot select file in explorer because of unknown file manager");
+			}
+
+		} catch (final Throwable throwable) {
+			Logger.printError("failed to select file in explorer");
+			Logger.printThrowable(throwable);
+		}
+	}
+
+	private static String detectLinuxFileManager() {
+
+		String linuxFileManager = null;
+		final String[] linuxFileManagerArray = { "nautilus", "dolphin", "thunar" };
+		for (final String aLinuxFileManager : linuxFileManagerArray) {
+
+			try {
+				final Process process = new ProcessBuilder()
+						.command("which", aLinuxFileManager)
+						.redirectErrorStream(true)
+						.start();
+
+				final int exitCode = process.waitFor();
+				if (exitCode == 0) {
+					linuxFileManager = aLinuxFileManager;
+				}
+
+			} catch (final Throwable ignored) {
+			}
+		}
+		return linuxFileManager;
 	}
 }

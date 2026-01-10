@@ -46,6 +46,7 @@ public class Messages implements Serializable {
 
 	public int computeMessageCount(
 			final MessageType messageType) {
+
 		return messageCountArray[messageType.ordinal()];
 	}
 

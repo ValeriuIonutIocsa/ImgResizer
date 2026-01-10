@@ -40,14 +40,13 @@ public final class WriterUtils {
 	}
 
 	@ApiMethod
-	public static boolean byteArrayToFile(
+	public static boolean tryByteArrayToFile(
 			final byte[] byteArray,
 			final String filePathString) {
 
 		boolean success = false;
 		try {
-			final Path filePath = Paths.get(filePathString);
-			Files.write(filePath, byteArray);
+			byteArrayToFile(byteArray, filePathString);
 			success = true;
 
 		} catch (final Throwable throwable) {
@@ -59,19 +58,31 @@ public final class WriterUtils {
 	}
 
 	@ApiMethod
-	public static void tryStringToFile(
+	public static void byteArrayToFile(
+			final byte[] byteArray,
+			final String filePathString) throws Exception {
+
+		final Path filePath = Paths.get(filePathString);
+		Files.write(filePath, byteArray);
+	}
+
+	@ApiMethod
+	public static boolean tryStringToFile(
 			final String string,
 			final Charset charset,
 			final String filePathString) {
 
+		boolean success = false;
 		try {
 			stringToFile(string, charset, filePathString);
+			success = true;
 
 		} catch (final Throwable throwable) {
 			Logger.printError("failed to write string to file:" +
 					System.lineSeparator() + filePathString);
 			Logger.printThrowable(throwable);
 		}
+		return success;
 	}
 
 	@ApiMethod

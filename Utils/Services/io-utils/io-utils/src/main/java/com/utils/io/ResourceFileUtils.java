@@ -19,6 +19,14 @@ public final class ResourceFileUtils {
 	}
 
 	@ApiMethod
+	public static boolean checkResourceFileExists(
+			final String resourceFilePathString) {
+
+		final URL resourceUrl = resourceFileToUrl(resourceFilePathString);
+		return resourceUrl != null;
+	}
+
+	@ApiMethod
 	public static List<String> resourceFileToLineList(
 			final String resourceFilePathString,
 			final Charset charset) {

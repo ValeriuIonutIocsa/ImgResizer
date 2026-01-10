@@ -20,6 +20,7 @@ import com.utils.string.StrUtils;
 public class ZipFileExtractor7z {
 
 	private final String sevenZipExecutablePathString;
+	private final int threadCount;
 	private final String archiveFilePathString;
 	private final String outputParentFolderPathString;
 	private final boolean deleteExisting;
@@ -28,11 +29,13 @@ public class ZipFileExtractor7z {
 
 	public ZipFileExtractor7z(
 			final String sevenZipExecutablePathString,
+			final int threadCount,
 			final String archiveFilePathString,
 			final String outputParentFolderPathString,
 			final boolean deleteExisting) {
 
 		this.sevenZipExecutablePathString = sevenZipExecutablePathString;
+		this.threadCount = threadCount;
 		this.archiveFilePathString = archiveFilePathString;
 		this.outputParentFolderPathString = outputParentFolderPathString;
 		this.deleteExisting = deleteExisting;
@@ -83,6 +86,9 @@ public class ZipFileExtractor7z {
 					commandPartList.add(sevenZipExecutablePathString);
 					commandPartList.add("x");
 					commandPartList.add("-bsp1");
+					if (threadCount >= 1) {
+						commandPartList.add("-mmt=" + threadCount);
+					}
 					commandPartList.add("-y");
 					commandPartList.add(archiveFilePathString);
 					commandPartList.add("-o" + outputParentFolderPathString);

@@ -206,8 +206,14 @@ public final class Logger {
 			final MessageLevel info,
 			final String message) {
 
+		final String userHomeReplacement;
+		if (SystemUtils.IS_OS_WINDOWS) {
+			userHomeReplacement = "%USERPROFILE%";
+		} else {
+			userHomeReplacement = "~";
+		}
 		final String processedMessage =
-				Strings.CS.replace(message, SystemUtils.USER_HOME, "%USERPROFILE%");
+				Strings.CS.replace(message, SystemUtils.USER_HOME, userHomeReplacement);
 		messageConsumer.printMessage(info, processedMessage);
 	}
 

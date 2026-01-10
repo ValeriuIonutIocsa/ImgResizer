@@ -14,7 +14,7 @@ class RegexUtilsTest {
 		final String patternString;
 		final boolean caseSensitive;
 		final boolean expectedMatches;
-		final int input = StrUtils.tryParsePositiveInt("11");
+		final int input = StrUtils.tryParsePositiveInt("101");
 		if (input == 1) {
 
 			string = "SOMEthing";
@@ -49,6 +49,13 @@ class RegexUtilsTest {
 			patternString = "^(?!Os_).*";
 			caseSensitive = true;
 			expectedMatches = true;
+
+		} else if (input == 101) {
+
+			string = "abcd";
+			patternString = "()";
+			caseSensitive = false;
+			expectedMatches = false;
 
 		} else {
 			throw new RuntimeException();

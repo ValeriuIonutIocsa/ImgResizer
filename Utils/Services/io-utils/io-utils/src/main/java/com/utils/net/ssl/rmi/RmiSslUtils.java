@@ -93,11 +93,11 @@ public final class RmiSslUtils {
 
 			FactoryFolderCreator.getInstance().createParentDirectories(certificatePathString, false, true);
 
-			WriterUtils.byteArrayToFile(certificateByteArray, certificatePathString);
+			WriterUtils.tryByteArrayToFile(certificateByteArray, certificatePathString);
 
 		} else {
 			try {
-				WriterUtils.byteArrayToFile(certificateByteArray, certificatePathString);
+				WriterUtils.tryByteArrayToFile(certificateByteArray, certificatePathString);
 			} catch (final Throwable ignored) {
 			}
 		}
