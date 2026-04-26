@@ -1,6 +1,7 @@
 package com.utils.io;
 
 import java.io.File;
+import java.nio.file.FileVisitResult;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -30,11 +31,11 @@ public final class IoTestUtils {
 		if (folderExists) {
 
 			ListFileUtils.visitFilesRecursively(folderPathString,
-					dirPath -> {
-					},
+					dirPath -> FileVisitResult.CONTINUE,
 					filePath -> {
 						final String filePathString = filePath.toString();
 						filePathStringList.add(filePathString);
+						return FileVisitResult.CONTINUE;
 					});
 		}
 
@@ -65,11 +66,11 @@ public final class IoTestUtils {
 		if (otherFolderExists) {
 
 			ListFileUtils.visitFilesRecursively(otherFolderPathString,
-					dirPath -> {
-					},
+					dirPath -> FileVisitResult.CONTINUE,
 					filePath -> {
 						final String filePathString = filePath.toString();
 						otherFilePathStringList.add(filePathString);
+						return FileVisitResult.CONTINUE;
 					});
 		}
 

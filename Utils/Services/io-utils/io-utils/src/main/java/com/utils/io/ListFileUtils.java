@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 import com.utils.annotations.ApiMethod;
 import com.utils.log.Logger;
@@ -20,8 +20,8 @@ public final class ListFileUtils {
 	@ApiMethod
 	public static void visitFiles(
 			final String rootDirPathString,
-			final Consumer<Path> visitDirectoryConsumer,
-			final Consumer<Path> visitFileConsumer) {
+			final Function<Path, FileVisitResult> visitDirectoryFunction,
+			final Function<Path, FileVisitResult> visitFileFunction) {
 
 		try {
 			final Path rootDirPath = Paths.get(rootDirPathString);
@@ -35,9 +35,14 @@ public final class ListFileUtils {
 					final FileVisitResult fileVisitResult;
 					if (rootDirPath.equals(dir)) {
 						fileVisitResult = FileVisitResult.CONTINUE;
+
 					} else {
-						visitDirectoryConsumer.accept(dir);
-						fileVisitResult = FileVisitResult.SKIP_SUBTREE;
+						final FileVisitResult tmpFileVisitResult = visitDirectoryFunction.apply(dir);
+						if (tmpFileVisitResult == FileVisitResult.CONTINUE) {
+							fileVisitResult = FileVisitResult.SKIP_SUBTREE;
+						} else {
+							fileVisitResult = tmpFileVisitResult;
+						}
 					}
 					return fileVisitResult;
 				}
@@ -47,8 +52,7 @@ public final class ListFileUtils {
 						final Path file,
 						final BasicFileAttributes attrs) {
 
-					visitFileConsumer.accept(file);
-					return FileVisitResult.CONTINUE;
+					return visitFileFunction.apply(file);
 				}
 
 				@Override
@@ -80,8 +84,8 @@ public final class ListFileUtils {
 	@ApiMethod
 	public static void visitFilesRecursively(
 			final String rootDirPathString,
-			final Consumer<Path> visitDirectoryConsumer,
-			final Consumer<Path> visitFileConsumer) {
+			final Function<Path, FileVisitResult> visitDirectoryFunction,
+			final Function<Path, FileVisitResult> visitFileFunction) {
 
 		try {
 			final Path rootDirPath = Paths.get(rootDirPathString);
@@ -92,10 +96,13 @@ public final class ListFileUtils {
 						final Path dir,
 						final BasicFileAttributes attrs) {
 
-					if (!rootDirPath.equals(dir)) {
-						visitDirectoryConsumer.accept(dir);
+					final FileVisitResult fileVisitResult;
+					if (rootDirPath.equals(dir)) {
+						fileVisitResult = FileVisitResult.CONTINUE;
+					} else {
+						fileVisitResult = visitDirectoryFunction.apply(dir);
 					}
-					return FileVisitResult.CONTINUE;
+					return fileVisitResult;
 				}
 
 				@Override
@@ -103,8 +110,7 @@ public final class ListFileUtils {
 						final Path file,
 						final BasicFileAttributes attrs) {
 
-					visitFileConsumer.accept(file);
-					return FileVisitResult.CONTINUE;
+					return visitFileFunction.apply(file);
 				}
 
 				@Override

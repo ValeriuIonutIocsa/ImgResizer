@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import com.utils.io.IoUtils;
 import com.utils.io.PathUtils;
@@ -54,7 +55,7 @@ public class ZipFileExtractor7z {
 				if (deleteExisting) {
 
 					final String zipArchiveName = PathUtils.computeFileName(archiveFilePathString);
-					final String zipArchiveNameWoExt = StrUtils.removeSuffixIgnoreCase(zipArchiveName, ".zip");
+					final String zipArchiveNameWoExt = Strings.CI.removeEnd(zipArchiveName, ".zip");
 					if (StringUtils.isNotBlank(zipArchiveNameWoExt)) {
 
 						final String extractedFilePathString =

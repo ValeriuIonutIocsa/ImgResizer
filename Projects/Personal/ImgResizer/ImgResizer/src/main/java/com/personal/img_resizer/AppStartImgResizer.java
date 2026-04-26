@@ -1,5 +1,6 @@
 package com.personal.img_resizer;
 
+import java.nio.file.FileVisitResult;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -86,11 +87,11 @@ final class AppStartImgResizer {
 			boolean foundImages = false;
 			final List<String> filePathStringList = new ArrayList<>();
 			ListFileUtils.visitFilesRecursively(inputPathString,
-					dirPath -> {
-					},
+					dirPath -> FileVisitResult.CONTINUE,
 					filePath -> {
 						final String filePathString = filePath.toString();
 						filePathStringList.add(filePathString);
+						return FileVisitResult.CONTINUE;
 					});
 			for (final String filePathString : filePathStringList) {
 

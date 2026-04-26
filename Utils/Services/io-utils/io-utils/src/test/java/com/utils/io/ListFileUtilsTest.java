@@ -1,5 +1,6 @@
 package com.utils.io;
 
+import java.nio.file.FileVisitResult;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,11 +23,13 @@ class ListFileUtilsTest {
 
 					final String dirPathString = dirPath.toString();
 					dirPathStringList.add(dirPathString);
+					return FileVisitResult.CONTINUE;
 
 				}, filePath -> {
 
 					final String filePathString = filePath.toString();
 					filePathStringList.add(filePathString);
+					return FileVisitResult.CONTINUE;
 				});
 
 		Logger.printLine("root dir path:");
@@ -54,11 +57,13 @@ class ListFileUtilsTest {
 
 					final String dirPathString = dirPath.toString();
 					dirPathStringList.add(dirPathString);
+					return FileVisitResult.CONTINUE;
 
 				}, filePath -> {
 
 					final String filePathString = filePath.toString();
 					filePathStringList.add(filePathString);
+					return FileVisitResult.CONTINUE;
 				});
 
 		Logger.printLine("root dir path:");

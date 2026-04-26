@@ -1,5 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-    <configuration default="false" factoryName="JUnit" folderName="io-utils" name="ExporterEnvironmentVariablesTest.testWork" nameIsGenerated="true" type="JUnit">
+    <configuration default="false" name="ExporterEnvironmentVariablesTest.testWork" type="JUnit" factoryName="JUnit" folderName="io-utils"
+                   nameIsGenerated="true">
         <module name="ImgResizerAllModules.io-utils.test"/>
         <extension name="coverage">
             <pattern>
@@ -12,7 +13,7 @@
         <option name="METHOD_NAME" value="testWork"/>
         <option name="TEST_OBJECT" value="method"/>
         <method v="2">
-            <option enabled="true" name="Make"/>
+            <option name="MakeProject" enabled="true"/>
         </method>
     </configuration>
 </component>

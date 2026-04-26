@@ -22,6 +22,7 @@ public final class HashUtils {
 
 		final Set<String> algorithmSet = Security.getAlgorithms("MessageDigest");
 		final List<String> algorithmList = new ArrayList<>(algorithmSet);
+		algorithmList.add("SHA");
 		algorithmList.sort(Comparator.naturalOrder());
 		return algorithmList;
 	}

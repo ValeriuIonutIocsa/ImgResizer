@@ -26,6 +26,11 @@ public class PatternWithCase implements Serializable {
 		this.caseSensitive = caseSensitive;
 	}
 
+	public PatternWithCase createCopy() {
+
+		return new PatternWithCase(patternString, caseSensitive);
+	}
+
 	public boolean checkMatches(
 			final String string) {
 

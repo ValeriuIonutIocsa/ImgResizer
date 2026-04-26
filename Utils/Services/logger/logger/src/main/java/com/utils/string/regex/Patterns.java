@@ -23,6 +23,25 @@ public class Patterns implements Serializable {
 		this.inclusionPattern = inclusionPattern;
 	}
 
+	public Patterns createCopy() {
+
+		final PatternWithCase exclusionPatternCopy;
+		if (exclusionPattern != null) {
+			exclusionPatternCopy = exclusionPattern.createCopy();
+		} else {
+			exclusionPatternCopy = null;
+		}
+
+		final PatternWithCase inclusionPatternCopy;
+		if (inclusionPattern != null) {
+			inclusionPatternCopy = inclusionPattern.createCopy();
+		} else {
+			inclusionPatternCopy = null;
+		}
+
+		return new Patterns(exclusionPatternCopy, inclusionPatternCopy);
+	}
+
 	public boolean checkMatches(
 			final String str) {
 

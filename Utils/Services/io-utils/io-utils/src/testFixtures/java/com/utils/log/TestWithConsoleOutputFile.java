@@ -24,6 +24,9 @@ public class TestWithConsoleOutputFile {
 
 		final MessageConsumer oldMessageConsumer = Logger.getMessageConsumer();
 
+		Logger.printProgress("logging console output to file:");
+		Logger.printLine(consoleOutputFilePathString);
+
 		FactoryFolderCreator.getInstance()
 				.createParentDirectories(consoleOutputFilePathString, false, true);
 		FactoryReadOnlyFlagClearer.getInstance()
@@ -38,6 +41,9 @@ public class TestWithConsoleOutputFile {
 
 		} finally {
 			Logger.setMessageConsumer(oldMessageConsumer);
+
+			Logger.printStatus("Finished logging console output to file:");
+			Logger.printLine(consoleOutputFilePathString);
 		}
 	}
 }

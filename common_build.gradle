@@ -14,6 +14,12 @@ if (project.hasProperty('projectVersion')) {
     version = '1.0.0'
 }
 
+if (project.hasProperty('mainClass')) {
+    apply plugin: 'application'
+    application {
+        mainClass = project.property('mainClass')
+    }
+}
 apply plugin: 'java-library'
 apply plugin: 'java-test-fixtures'
 
@@ -25,7 +31,6 @@ compileJava.options.encoding = 'UTF-8'
 
 repositories {
     mavenCentral()
-    mavenLocal()
 }
 
 dependencies {
@@ -50,9 +55,9 @@ dependencies {
         }
     }
 
-    testFixturesImplementation 'org.junit.jupiter:junit-jupiter-api:6.0.1'
-    testFixturesRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:6.0.1'
-    testFixturesRuntimeOnly 'org.junit.platform:junit-platform-launcher:6.0.1'
+    testFixturesImplementation 'org.junit.jupiter:junit-jupiter-api:6.0.3'
+    testFixturesRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:6.0.3'
+    testFixturesRuntimeOnly 'org.junit.platform:junit-platform-launcher:6.0.3'
 
     for (final String testCompileClassPath : testCompileClassPaths) {
 
@@ -67,10 +72,10 @@ dependencies {
         }
     }
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:6.0.1'
-    testImplementation 'org.junit.jupiter:junit-jupiter-params:6.0.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:6.0.1'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:6.0.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:6.0.3'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:6.0.3'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:6.0.3'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:6.0.3'
 
     for (final String testCompileClassPath : testCompileClassPaths) {
 
@@ -254,12 +259,6 @@ static def copyFile(
             new File(srcDir, fileName).toPath(),
             new File(destDir, fileName).toPath(),
             StandardCopyOption.REPLACE_EXISTING)
-}
-
-artifacts {
-
-    archives fatJar
-    archives sourcesJar
 }
 
 task subProjectDependencyTree {

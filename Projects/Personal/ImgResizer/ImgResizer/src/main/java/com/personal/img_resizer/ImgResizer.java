@@ -188,11 +188,15 @@ final class ImgResizer {
 					readBytesHandler = new ReadBytesHandlerLinesCollect();
 				}
 				final InputStream inputStream = process.getInputStream();
-				new InputStreamReaderThread("resize image", inputStream, Charset.defaultCharset(),
-						readBytesHandler).start();
+				final InputStreamReaderThread inputStreamReaderThread =
+						new InputStreamReaderThread("resize image", inputStream,
+								Charset.defaultCharset(), readBytesHandler);
+				inputStreamReaderThread.start();
 
 				final int exitCode = process.waitFor();
 				success = exitCode == 0;
+
+				inputStreamReaderThread.join();
 
 				needToImportMetadata = true;
 			}

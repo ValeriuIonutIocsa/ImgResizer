@@ -28,18 +28,29 @@ class HashUtilsTest {
 		final String filePathString;
 		final String algorithm;
 		final String expectedHash;
-		final int input = StrUtils.tryParsePositiveInt("2");
+		final int input = StrUtils.tryParsePositiveInt("1");
 		if (input == 1) {
-
+			filePathString = "D:\\p\\0g\\0a3\\911\\0g0a3_0u0_911\\work\\3R\\t1\\lib\\libt1base.a";
+			algorithm = "SHA";
+			expectedHash = "cce2e41456dfbfd95932bf9aac5a1b01e8f88de9";
+		} else if (input == 2) {
+			filePathString = "D:\\p\\0g\\0a3\\911\\0g0a3_0u0_911\\work\\3R\\t1\\lib\\libt1base.a";
+			algorithm = "SHA-1";
+			expectedHash = "cce2e41456dfbfd95932bf9aac5a1b01e8f88de9";
+		} else if (input == 3) {
 			filePathString = "D:\\p\\0g\\0a3\\911\\0g0a3_0u0_911\\work\\3R\\t1\\lib\\libt1base.a";
 			algorithm = "SHA-256";
 			expectedHash = "239BA426BC125B8E28C12AA4CB9E09DBAB33F3E7E760C2103DD9CC4119F0CB3E";
-
-		} else if (input == 2) {
+		} else if (input == 11) {
 			filePathString = "D:\\casdev\\td5\\bm\\g12\\lb4\\BMG12_0U0_LB4_022\\" +
 					"_FS_BMG12_0U0_NORMAL\\out\\code\\FS_BMG12_0U0_LB4_022.elf";
 			algorithm = "SHA-256";
 			expectedHash = "f133a932295037dd7fe2cd5d35bb1ca7de95324eba24104628f396430be894a1";
+
+		} else if (input == 101) {
+			filePathString = "D:\\p\\0g\\0a3\\911\\0g0a3_0u0_911\\work\\3R\\t1\\lib\\libt1base.a";
+			algorithm = "ABC";
+			expectedHash = null;
 
 		} else {
 			throw new RuntimeException();
