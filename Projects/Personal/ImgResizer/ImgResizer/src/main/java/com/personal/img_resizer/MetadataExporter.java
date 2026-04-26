@@ -70,14 +70,21 @@ class MetadataExporter {
 			final InputStream inputStream = process.getInputStream();
 			final ReadBytesHandlerLinesCollect readBytesHandlerLinesCollect =
 					new ReadBytesHandlerLinesCollect();
-			new InputStreamReaderThread("export metadata output", inputStream, Charset.defaultCharset(),
-					readBytesHandlerLinesCollect).start();
+			final InputStreamReaderThread inputStreamReaderThread =
+					new InputStreamReaderThread("export metadata output", inputStream,
+							Charset.defaultCharset(), readBytesHandlerLinesCollect);
+			inputStreamReaderThread.start();
 
 			final InputStream errorStream = process.getErrorStream();
-			new InputStreamReaderThread("export metadata error", errorStream, Charset.defaultCharset(),
-					new ReadBytesHandlerLinesPrint()).start();
+			final InputStreamReaderThread errorInputStreamReaderThread =
+					new InputStreamReaderThread("export metadata error", errorStream,
+							Charset.defaultCharset(), new ReadBytesHandlerLinesPrint());
+			errorInputStreamReaderThread.start();
 
 			final int exitCode = process.waitFor();
+
+			inputStreamReaderThread.join();
+			errorInputStreamReaderThread.join();
 
 			final List<String> lineList = readBytesHandlerLinesCollect.getLineList();
 			for (final String line : lineList) {

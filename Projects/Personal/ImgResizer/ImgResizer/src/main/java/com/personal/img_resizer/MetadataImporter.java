@@ -59,11 +59,15 @@ class MetadataImporter {
 				readBytesHandler = new ReadBytesHandlerLinesCollect();
 			}
 			final InputStream inputStream = process.getInputStream();
-			new InputStreamReaderThread("import metadata", inputStream, Charset.defaultCharset(),
-					readBytesHandler).start();
+			final InputStreamReaderThread inputStreamReaderThread =
+					new InputStreamReaderThread("import metadata", inputStream,
+							Charset.defaultCharset(), readBytesHandler);
+			inputStreamReaderThread.start();
 
 			final int exitCode = process.waitFor();
 			success = exitCode == 0;
+
+			inputStreamReaderThread.join();
 
 		} catch (final Throwable throwable) {
 			Logger.printThrowable(throwable);
