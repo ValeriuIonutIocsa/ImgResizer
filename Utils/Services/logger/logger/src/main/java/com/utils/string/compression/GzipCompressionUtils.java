@@ -23,7 +23,7 @@ public final class GZipCompressionUtils {
 					GZIPOutputStream gzipOutputStream = new GZIPOutputStream(byteArrayOutputStream)) {
 
 				gzipOutputStream.write(uncompressedData);
-				gzipOutputStream.close();
+				gzipOutputStream.finish();
 				compressedData = byteArrayOutputStream.toByteArray();
 
 			} catch (final Throwable ignored) {

@@ -40,21 +40,27 @@ abstract class AbstractConcurrencyUtilsShowProgress extends AbstractConcurrencyU
 			} else {
 				executorService = Executors.newFixedThreadPool(threadCount);
 			}
-			ProgressIndicators.getInstance().update(0);
+			try {
+				ProgressIndicators.getInstance().update(0);
 
-			final List<Future<?>> futureList = new ArrayList<>();
-			final AtomicInteger completedRunnablesCount = new AtomicInteger(0);
-			final int runnableCount = runnableList.size();
-			for (final Runnable runnable : runnableList) {
-				submitCallable(runnable, executorService, futureList,
-						completedRunnablesCount, runnableCount, showProgressInterval);
+				final List<Future<?>> futureList = new ArrayList<>();
+				final AtomicInteger completedRunnablesCount = new AtomicInteger(0);
+				final int runnableCount = runnableList.size();
+				for (final Runnable runnable : runnableList) {
+					submitCallable(runnable, executorService, futureList,
+							completedRunnablesCount, runnableCount, showProgressInterval);
+				}
+
+				for (final Future<?> future : futureList) {
+					futureGet(future);
+				}
+
+			} catch (final Throwable throwable) {
+				Logger.printThrowable(throwable);
+
+			} finally {
+				executorService.shutdown();
 			}
-
-			for (final Future<?> future : futureList) {
-				futureGet(future);
-			}
-
-			executorService.shutdown();
 
 			boolean awaitTerminationSuccess = false;
 			try {

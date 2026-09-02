@@ -71,8 +71,8 @@ public final class FactoryCustomSslContext {
 		if (trustManagers.length > 0) {
 
 			final TrustManager trustManager = trustManagers[0];
-			if (trustManager instanceof X509TrustManager) {
-				x509TrustManager = (X509TrustManager) trustManager;
+			if (trustManager instanceof final X509TrustManager tmpX509TrustManager) {
+				x509TrustManager = tmpX509TrustManager;
 			}
 		}
 		if (x509TrustManager == null) {

@@ -33,17 +33,22 @@ public abstract class AbstractConcurrencyUtilsSimple extends AbstractConcurrency
 			} else {
 				executorService = Executors.newFixedThreadPool(threadCount);
 			}
+			try {
+				final List<Future<?>> futureList = new ArrayList<>();
+				for (final Runnable runnable : runnableList) {
+					submitCallable(runnable, executorService, futureList);
+				}
 
-			final List<Future<?>> futureList = new ArrayList<>();
-			for (final Runnable runnable : runnableList) {
-				submitCallable(runnable, executorService, futureList);
+				for (final Future<?> future : futureList) {
+					futureGet(future);
+				}
+
+			} catch (final Throwable throwable) {
+				Logger.printThrowable(throwable);
+
+			} finally {
+				executorService.shutdown();
 			}
-
-			for (final Future<?> future : futureList) {
-				futureGet(future);
-			}
-
-			executorService.shutdown();
 
 			boolean awaitTerminationSuccess = false;
 			try {

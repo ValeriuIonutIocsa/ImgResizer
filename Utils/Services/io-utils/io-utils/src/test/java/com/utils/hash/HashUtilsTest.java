@@ -11,7 +11,7 @@ import com.utils.string.StrUtils;
 class HashUtilsTest {
 
 	@Test
-	public void testCreateHashAlgorithmList() {
+	void testCreateHashAlgorithmList() {
 
 		final List<String> hashAlgorithmList = HashUtils.createHashAlgorithmList();
 
@@ -23,7 +23,7 @@ class HashUtilsTest {
 	}
 
 	@Test
-	public void testComputeFileHash() {
+	void testComputeFileHash() {
 
 		final String filePathString;
 		final String algorithm;

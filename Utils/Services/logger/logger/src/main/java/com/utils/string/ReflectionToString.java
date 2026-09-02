@@ -19,11 +19,11 @@ final class ReflectionToString {
 			final Object obj) {
 
 		final StringBuilder sb = new StringBuilder();
-		work(obj, new ArrayList<>(), sb);
+		workRec(obj, new ArrayList<>(), sb);
 		return sb.toString();
 	}
 
-	private static void work(
+	private static void workRec(
 			final Object obj,
 			final List<Object> objList,
 			final StringBuilder sb) {
@@ -40,7 +40,7 @@ final class ReflectionToString {
 			final Object obj,
 			final Class<?> cls,
 			final List<Object> objList,
-			final StringBuilder sb) throws Exception {
+			final StringBuilder sb) {
 
 		final boolean appended;
 		if (cls == null || Object.class.equals(cls)) {
@@ -62,36 +62,51 @@ final class ReflectionToString {
 				if (!staticField) {
 
 					final String fieldName = field.getName();
+
+					boolean keepGoing = true;
+
 					Object fieldValue = null;
-					if (obj instanceof Enum<?>) {
+					if (obj instanceof final Enum<?> objEnum) {
 
-						if ("name".equals(fieldName)) {
-							final Enum<?> objEnum = (Enum<?>) obj;
-							fieldValue = objEnum.name();
+						if ("hash".equals(fieldName)) {
+							keepGoing = false;
 
-						} else if ("ordinal".equals(fieldName)) {
-							final Enum<?> objEnum = (Enum<?>) obj;
-							fieldValue = objEnum.ordinal();
+						} else {
+							if ("name".equals(fieldName)) {
+								fieldValue = objEnum.name();
+							} else if ("ordinal".equals(fieldName)) {
+								fieldValue = objEnum.ordinal();
+							}
 						}
 					}
-					if (fieldValue == null) {
+					if (keepGoing) {
 
-						field.setAccessible(true);
-						fieldValue = field.get(obj);
+						if (fieldValue == null) {
+
+							try {
+								field.setAccessible(true);
+								fieldValue = field.get(obj);
+							} catch (final Throwable ignored) {
+								keepGoing = false;
+							}
+						}
 					}
-					if (first) {
+					if (keepGoing) {
 
-						if (superClassAppended) {
+						if (first) {
+
+							if (superClassAppended) {
+								sb.append(", ");
+							}
+							first = false;
+
+						} else {
 							sb.append(", ");
 						}
-						first = false;
-
-					} else {
-						sb.append(", ");
+						sb.append(fieldName).append("=\"");
+						appendFieldValue(fieldValue, objList, sb);
+						sb.append('"');
 					}
-					sb.append(fieldName).append("=\"");
-					appendFieldValue(fieldValue, objList, sb);
-					sb.append('"');
 				}
 			}
 
@@ -238,7 +253,7 @@ final class ReflectionToString {
 
 				} else {
 					objList.add(obj);
-					work(obj, objList, sb);
+					workRec(obj, objList, sb);
 				}
 			}
 		}
@@ -257,12 +272,15 @@ final class ReflectionToString {
 			final List<Object> objList) {
 
 		boolean visitedBefore = false;
-		for (final Object objListObject : objList) {
+		if (!(object instanceof Enum<?>)) {
 
-			if (object == objListObject) {
+			for (final Object objListObject : objList) {
 
-				visitedBefore = true;
-				break;
+				if (object == objListObject) {
+
+					visitedBefore = true;
+					break;
+				}
 			}
 		}
 		return visitedBefore;

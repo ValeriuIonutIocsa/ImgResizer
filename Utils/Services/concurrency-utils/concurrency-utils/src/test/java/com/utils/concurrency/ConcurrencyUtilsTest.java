@@ -56,7 +56,7 @@ class ConcurrencyUtilsTest {
 
 				final long startTime = System.currentTimeMillis();
 				try {
-					final int runTime = (int) (random.nextDouble() * 1000);
+					final int runTime = random.nextInt(1000);
 					Logger.printLine("run time for task " + index + ": " + StrUtils.timeMsToString(runTime));
 
 					Thread.sleep(runTime);
